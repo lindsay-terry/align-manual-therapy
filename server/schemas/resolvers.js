@@ -26,7 +26,12 @@ const resolvers = {
         // },
         // Query all services
         services: async () => {
-            return Service.find().populate('practitioner');
+            try {
+                return await Service.find().populate('practitioner');
+            } catch (error) {
+                console.error('Error fetching services', error);
+                throw new Error('Failed to fetch services.');
+            }
         }
     }, 
 

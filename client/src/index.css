@@ -1,19 +1,26 @@
 :root {
-    --caf-noir: #54390Dff;
+    /* using  */
+    --isabelline: #F4F0EFff;
+    --alabaster: #F0E9DFff;
+    --olive-2: #888328ff;
+    --black-olive: #313920ff;
     --dark-moss-green: #3B4311ff;
     --eerie-black: #19231Bff;
-    --night: #0D140Cff;
     --papaya-whip: #FDEDCCff;
-    --black-olive: #313920ff;
+
+    /* Not sure if using/not using yet  */
+    --caf-noir: #54390Dff;
+    --night: #0D140Cff;
     --field-drab: #6D5124ff;
     --xanthous: #F4B23Cff;
     --dark-goldenrod: #977E37ff;
     /* trying to find the right green for header  */
     --dark-moss-green-2: #55622Cff;
     --dark-moss-green-3: #606511ff;
-    --olive: #8C8131ff;
-    /* using olive2 for now  */
-    --olive-2: #888328ff;
+    --olive: #8C8131ff;  
+    --black-bean: #2F1303ff;
+    --tan: #DCBC9Dff;
+    --khaki: #BFA48Bff;
 }
 
 body {

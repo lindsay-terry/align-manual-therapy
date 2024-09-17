@@ -31,6 +31,7 @@ export const QUERY_USER = gql`
 export const QUERY_SERVICES = gql`
     query getServices {
         services {
+            _id
             name
             description
             cleanup
