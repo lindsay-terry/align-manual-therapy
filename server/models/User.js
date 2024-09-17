@@ -1,5 +1,6 @@
 const { Schema, model } = require('mongoose');
 const bcrypt = require('bcrypt');
+const serviceSchema = require('./Service');
 
 const userSchema = new Schema({
     firstName: {
@@ -20,17 +21,32 @@ const userSchema = new Schema({
         },
         required: [true, 'Please include a valid email address'],
     },
+    phone: {
+        type: String,
+        validate: {
+          validator: function(v) {
+            return /\d{3}-\d{3}-\d{4}/.test(v);
+          },
+          message: props => `${props.value} is not a valid phone number!`
+        },
+        required: [true, 'User phone number required']
+      },
     password: {
         type: String,
         required: true,
-        min: [8, 'Password must be at least 8 characters'],
-        max: 24,
+        minlength: [8, 'Password must be at least 8 characters'],
+        maxlength: 24,
     },
     // Regular user = 0, Admin = 1
     role: {
         type: Number,
         default: 0,
     },
+    birthdate: {
+        type: Date,
+        required: [true, 'Please enter date of birth'],
+    },
+    services: [{ type: Schema.Types.ObjectId, ref: 'Service' }],
 });
 
 // Set up pre-save middleware to create password
