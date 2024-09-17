@@ -15,7 +15,7 @@ const userSchema = new Schema({
         type: String,
         validate: {
             validator: function(v) {
-                return /\^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/.test(v);
+              return /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/.test(v);
             },
             message: props => `${props.value} is not a valid email address.`
         },

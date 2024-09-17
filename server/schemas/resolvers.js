@@ -26,7 +26,7 @@ const resolvers = {
         // },
         // Query all services
         services: async () => {
-            return Service.find();
+            return Service.find().populate('practitioner');
         }
     }, 
 
