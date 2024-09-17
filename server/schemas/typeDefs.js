@@ -11,13 +11,17 @@ const typeDefs =`
         services: [Service]
     }
 
+    type Option {
+        duration: Int!
+        price: Float!
+    }
+
     type Service {
         _id: ID!
         name: String!
         description: String!
-        duration: Int!
         cleanup: Int!
-        price: Float!
+        options: [Option]
         practitioner: [User]
     }
 

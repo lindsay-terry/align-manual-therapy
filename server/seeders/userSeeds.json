@@ -1,0 +1,38 @@
+[
+    {
+        "firstName": "Rory",
+        "lastName": "Gilmore",
+        "email": "smrt@yale.com",
+        "phone": "123-456-7890",
+        "password": "securepassword2",
+        "role": 0,
+        "birthdate": "10/08/1990"
+    },
+    {
+        "firstName": "Jaunry",
+        "lastName": "Jivers",
+        "email": "jjivers@email.com",
+        "phone": "789-456-7899",
+        "password": "securepassword2",
+        "role": 0,
+        "birthdate": "2/08/1985"
+    },
+    {
+        "firstName": "November",
+        "lastName": "Briar",
+        "email": "fallshere@email.com",
+        "phone": "222-426-7290",
+        "password": "securepassword2",
+        "role": 0,
+        "birthdate": "12/22/1934"
+    },
+    {
+        "firstName": "Boss",
+        "lastName": "Betos",
+        "email": "boss@boss.com",
+        "phone": "333-333-3331",
+        "password": "securepassword2",
+        "role": 1,
+        "birthdate": "11/17/1993"
+    }
+]

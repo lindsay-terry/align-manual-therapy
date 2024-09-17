@@ -1,5 +1,6 @@
 const { Schema, model } = require('mongoose');
-const userSchema = require('./User');
+const User = require('./User');
+const optionSchema = require('./Option');
 
 const serviceSchema = new Schema({
     name: {
@@ -10,19 +11,20 @@ const serviceSchema = new Schema({
         type: String,
         required: true,
     },
-    duration: {
-        type: Number,
-        required: true,
-    },
+    // duration: {
+    //     type: Number,
+    //     required: true,
+    // },
+    options: [optionSchema],
     cleanup: {
         type: Number,
         required: true,
     },
-    price: {
-        type: Number,
-        required: true,
-        min: 0,
-    },
+    // price: {
+    //     type: Number,
+    //     required: true,
+    //     min: 0,
+    // },
     practitioner: [{ type: Schema.Types.ObjectId, ref: 'User'}]
 
 });
