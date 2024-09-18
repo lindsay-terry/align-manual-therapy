@@ -11,6 +11,10 @@ const typeDefs =`
         services: [Service]
     }
 
+    type Query {
+        hello: String
+    }
+
     type Option {
         duration: Int!
         price: Float!
@@ -36,10 +40,17 @@ const typeDefs =`
         services: [Service]
         me: User
     }
+    
+    type PaymentResult {
+        success: Boolean!
+        transactionId: String
+        errorMessage: String
+    }
 
     type Mutation {
         login(email: String!, password: String!): Auth
         createUser( firstName: String!, lastName: String!, email: String!, password: String!, phone: String!, birthdate: String!): Auth
+        processPayment(sourceId: String!, amount: Int!): PaymentResult!
     }
 `;
 

@@ -1,5 +1,11 @@
 const { User, Service } = require('../models');
 const { signToken, AuthenticationError } = require('../utils/auth');
+const { Client, Environment, ApiError } = require("square");
+
+const client = new Client({
+    environment: Environment.Sandbox,
+    accessToken: process.env.SQUARE_ACCESS_TOKEN,
+});
 
 const resolvers = {
     Query: {
@@ -62,6 +68,40 @@ const resolvers = {
             const token = signToken(user);
 
             return { token, user };
+        },
+        async processPayment(_, { sourceId, amount }) {
+            try {
+              const { paymentsApi } = client;
+              const paymentResponse = await paymentsApi.createPayment({
+                sourceId,
+                idempotencyKey: new Date().getTime().toString(), // Prevent duplicate payments
+                amountMoney: {
+                  amount, // Amount in cents
+                  currency: 'USD',
+                },
+              });
+      
+              return {
+                success: true,
+                transactionId: paymentResponse.result.payment.id,
+                errorMessage: null,
+              };
+            } catch (error) {
+              if (error instanceof ApiError) {
+                return {
+                  success: false,
+                  transactionId: null,
+                  errorMessage: error.result.errors[0].detail,
+                };
+              } else {
+                return {
+                  success: false,
+                  transactionId: null,
+                  errorMessage: "Unexpected error occurred",
+                };
+              }
+            }
+        
         },
     },
 };
