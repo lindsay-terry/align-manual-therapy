@@ -2,6 +2,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { Drawer, Button, Menu, Flex } from 'antd';
 import { MenuOutlined } from '@ant-design/icons';
+import Auth from '../../utils/auth';
 {/* <CloseOutlined /> */}
 
 export default function Nav() {
@@ -18,6 +19,13 @@ export default function Nav() {
     const closeDrawer = () => {
         setOpen(false);
     }
+
+    // Log out logged in user
+    const handleLogout = () => {
+        Auth.logout();
+        window.location.href = '/';
+        console.log('Logged out!');
+    };
 
     // Watch for changes in screen size state to handle styling for screen sizes
     useEffect(() => {
@@ -59,7 +67,11 @@ export default function Nav() {
         { path: '/education', label: 'Education' },
         { path: '/blog', label: 'Blog' },
         { path: '/contact', label: 'Contact' },
-        { path: '/login', label: 'Login' },
+        // If logged in, show logout button.  Vice versa
+        ...(Auth.loggedIn()
+        ? ''
+        : [{ path: '/login', label: 'Login' }]
+    )
     ];
 
 
@@ -78,6 +90,9 @@ export default function Nav() {
                         {item.label}
                     </Link>
                 ))}
+                       {Auth.loggedIn() && (
+                            <Button onClick={handleLogout} style={styles.inactiveLink}>Logout</Button>
+                    )}
             </Flex>
 
             {/* Use drawer component for menu on smaller screens */}
@@ -90,6 +105,11 @@ export default function Nav() {
                             </Link>
                         </Menu.Item>
                     ))}
+                        {Auth.loggedIn() && (
+                        <Menu.Item key="logout">
+                            <Button onClick={handleLogout} style={styles.inactiveLink}>Logout</Button>
+                        </Menu.Item>
+                    )}
                 </Menu>
             </Drawer>
         </Flex>

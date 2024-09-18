@@ -75,3 +75,28 @@ export const QUERY_ME = gql`
         }
     }
 `;
+
+export const QUERY_APPOINTMENTS = gql`
+    query getAppointments {
+        appointments{
+            _id
+            date
+            time
+            user {
+                _id
+                firstName
+                lastName
+                email
+            }
+            service {
+                _id
+                name
+                description
+                options {
+                    duration
+                    price
+                }
+            }
+        }
+    }
+`;

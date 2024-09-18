@@ -1,4 +1,4 @@
-const { User, Service } = require('../models');
+const { User, Service, Appointment } = require('../models');
 const { signToken, AuthenticationError } = require('../utils/auth');
 const { Client, Environment, ApiError } = require("square");
 
@@ -38,7 +38,16 @@ const resolvers = {
                 console.error('Error fetching services', error);
                 throw new Error('Failed to fetch services.');
             }
-        }
+        },
+        appointments: async () => {
+          try {
+              return await Appointment.find()
+              .populate('user')
+              .populate('service');
+          } catch (error) {
+              throw new Error('Failed to fetch appointment data.');
+          }
+      },
     }, 
 
     Mutation: {
@@ -103,6 +112,15 @@ const resolvers = {
             }
         
         },
+        createAppointment: async(parent, args) => {
+          try {
+              const appointment = await Appointment.create(args);
+
+              return appointment;
+          } catch (error) {
+              console.error('Error creating appointment', error);
+          }
+      },
     },
 };
 
