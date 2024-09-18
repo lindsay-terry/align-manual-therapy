@@ -20,6 +20,7 @@ const userSchema = new Schema({
             message: props => `${props.value} is not a valid email address.`
         },
         required: [true, 'Please include a valid email address'],
+        unique: true,
     },
     phone: {
         type: String,
@@ -61,7 +62,7 @@ userSchema.pre('save', async function (next) {
   
   // Compare the incoming password with the hashed password
   userSchema.methods.isCorrectPassword = async function (password) {
-    await bcrypt.compare(password, this.password);
+    return bcrypt.compare(password, this.password);
   };
 
 const User = model('User', userSchema);
