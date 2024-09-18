@@ -11,13 +11,17 @@ const typeDefs =`
         services: [Service]
     }
 
-    type Query {
-        hello: String
-    }
-
     type Option {
         duration: Int!
         price: Float!
+    }
+
+    type Appointment {
+        _id: ID!
+        service: Service
+        user: User
+        date: String!
+        time: String!
     }
 
     type Service {
@@ -39,6 +43,7 @@ const typeDefs =`
         user(email: String!): User
         services: [Service]
         me: User
+        appointments: [Appointment]
     }
     
     type PaymentResult {
@@ -51,6 +56,7 @@ const typeDefs =`
         login(email: String!, password: String!): Auth
         createUser( firstName: String!, lastName: String!, email: String!, password: String!, phone: String!, birthdate: String!): Auth
         processPayment(sourceId: String!, amount: Int!): PaymentResult!
+        createAppointment(service: ID!, user: ID!, date: String!, time: String!): Appointment
     }
 `;
 

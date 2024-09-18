@@ -7,6 +7,8 @@
     --dark-moss-green: #3B4311ff;
     --eerie-black: #19231Bff;
     --papaya-whip: #FDEDCCff;
+    --asparagus-2: #80AC64ff;
+    --black-bean: #491510ff;
 
     /* Not sure if using/not using yet  */
     --caf-noir: #54390Dff;
@@ -21,6 +23,12 @@
     --black-bean: #2F1303ff;
     --tan: #DCBC9Dff;
     --khaki: #BFA48Bff;
+
+    /* better greens and a pinkish */
+    --asparagus: #6E9569ff;
+
+    --sky-magenta: #C77FABff;
+
 }
 
 body {

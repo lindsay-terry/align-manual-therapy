@@ -21,3 +21,27 @@ export const CREATE_USER = gql `
         }
     }    
 `;
+
+export const CREATE_APPOINTMENT = gql`
+    mutation createAppointment($service: ID!, $user: ID!, $date: String!, $time: String!) {
+        createAppointment(service: $service, user: $user, date: $date, time: $time) {
+            _id
+            service {
+                _id
+                name
+                options {
+                    duration
+                    price
+                }
+            user {
+                _id
+                firstName
+                lastName
+                phone
+            }
+            date
+            time
+            }
+        }
+    }
+`

@@ -1,15 +1,17 @@
 import { Form, Radio, Card, Collapse, Button } from 'antd';
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { QUERY_SERVICES } from '../../utils/queries';
 import { useQuery } from '@apollo/client';
 import BookingCalendar  from './BookingCalendar';
+import Auth from '../../utils/auth';
 
 export default function BookServices() {
     const styles={
         nextBtn: {
-            borderColor: 'var(--papaya-whip)',
+            borderColor: 'var(--black-bean)',
             color: 'var(--papaya-whip)',
-            backgroundColor: 'var(--olive)',
+            backgroundColor: 'var(--asparagus-2)',
         },
         container: {
             display: 'flex',
@@ -95,7 +97,21 @@ export default function BookServices() {
                 <Radio.Group onChange={handleChange}>
                     <Collapse accordion={true} items={collapseItems} style={styles.customPanel} />
                 </Radio.Group>
+            {Auth.loggedIn()? (
             <Button block={true} disabled={!selectedValue} style={styles.nextBtn} onClick={handleSubmit}>Next</Button>
+            ) : (
+                <div>
+                    <p>Must be logged in to book services.</p>
+                    <div style={{display: 'flex', justifyContent: 'space-evenly'}}>
+                        <Link to='/signup'>
+                            <Button style={styles.nextBtn}>Sign up</Button>
+                        </Link>
+                        <Link to='/login'>
+                            <Button style={styles.nextBtn}>Log In</Button>
+                        </Link>
+                    </div>
+                </div>
+            )}
         </Form>
         ) : (
             // Pass user selection as props to calendar
