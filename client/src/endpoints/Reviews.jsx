@@ -1,47 +1,13 @@
-// Import necessary dependencies
+// Import necessary dependencies from React and Ant Design
 import React, { useEffect, useState } from 'react';
-import Modal from '../components/UI/Modal';
+import { Button, Modal, Typography, Layout } from 'antd';
+
+// Destructure components from Ant Design
+const { Title } = Typography;
+const { Content } = Layout;
 
 // Define the Reviews component
 const Reviews = () => {
-    const styles = {
-        modalOverlay: {
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            backgroundColor: 'rgba(0, 0, 0, 0.7)',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            zIndex: 1000,
-        },
-        modalContent: {
-            backgroundColor: 'white',
-            padding: '20px',
-            borderRadius: '8px',
-            width: '80%',
-            maxWidth: '700px',
-            maxHeight: '80vh',
-            overflowY: 'auto',
-            position: 'relative',
-        },
-        closeButton: {
-            position: 'absolute',
-            top: '10px',
-            right: '10px',
-            cursor: 'pointer',
-        },
-        reviewsContainer: {
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            height: '100vh',
-            textAlign: 'center',
-        },
-    };
-
     // State to control the visibility of the modal
     const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -58,9 +24,8 @@ const Reviews = () => {
     // Effect hook to manage loading of the third-party script
     useEffect(() => {
         if (isModalOpen) {
-            // Create a new script element for loading the SociableKIT script
             const script = document.createElement('script');
-            script.src = import.meta.env.VITE_SOCIABLEKIT_SCRIPT_URL; // Use environment variable
+            script.src = import.meta.env.VITE_SOCIABLEKIT_SCRIPT_URL;
             script.async = true;
             script.defer = true;
 
@@ -70,7 +35,6 @@ const Reviews = () => {
             widgetContainer.className = import.meta.env.VITE_SOCIABLEKIT_CLASS_NAME;
             widgetContainer.appendChild(script);
 
-            // Cleanup function to remove the script and its effects when the modal is closed or component unmounts
             return () => {
                 if (widgetContainer) {
                     widgetContainer.innerHTML = '';
@@ -80,25 +44,49 @@ const Reviews = () => {
     }, [isModalOpen]);
 
     // Render the Reviews component
-
     return (
-        <div style={styles.reviewsContainer}>
-            <h1>What Our Clients Are Saying</h1>
-            <button onClick={handleOpenModal}>Google Reviews</button>
+        <Layout style={{ padding: '20px' }}>
+            <Content className="reviews-container" style={{ textAlign: 'center' }}>
+                <Title level={2}>What Our Clients Are Saying</Title>
+                
+                {/* Button to open the modal */}
+                <Button type="primary" onClick={handleOpenModal}>
+                    Google Reviews
+                </Button>
 
-            <Modal show={isModalOpen} onClose={handleCloseModal}>
-                <div style={styles.modalContent}>
-                    <button style={styles.closeButton} onClick={handleCloseModal}>
-                        X
-                    </button>
-                    <h3>Customer Reviews</h3>
-                    {/* Container where the third-party script content will be loaded */}
-                    <div id="widget-container"></div>
-                </div>
-            </Modal>
-        </div>
+                {/* Modal component */}
+                <Modal
+                    title="Customer Reviews"
+                    open={isModalOpen}
+                    onCancel={handleCloseModal}
+                    footer={null}
+                    centered
+                    width={700}
+                >
+                    {/* Container where the content will be loaded */}
+                    <div 
+                        id="widget-container" 
+                        className={import.meta.env.VITE_SOCIABLEKIT_CLASS_NAME}
+                        style={{
+                            maxHeight: '500px',
+                            overflowY: 'auto',
+                        }}
+                    ></div>
+
+                    {/* Button for External Link */}
+                    <a
+                        href="https://search.google.com/local/writereview?placeid=ChIJ15vXhd5FyoARZ_NNeCWosD0"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+                        <Button type="primary" style={{ marginTop: '20px' }}>
+                            Leave a Review on Google
+                        </Button>
+                    </a>
+                </Modal>
+            </Content>
+        </Layout>
     );
 };
 
-// Export the Reviews component as the default export
 export default Reviews;
