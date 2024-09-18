@@ -37,21 +37,25 @@ const resolvers = {
 
     Mutation: {
         login: async (parent, { email, password }) => {
-            const user = await User.findOne({ email });
+            try {
+                const user = await User.findOne({ email });
+  
+                if (!user) {
+                    throw new Error('Incorrect email or password.')
+                }
 
-            if (!user) {
-                throw AuthenticationError;
+                const correctPassword = await user.isCorrectPassword(password);
+
+                if (!correctPassword) {
+                    throw new Error('Incorrect email or password.');
+                }
+
+                const token = signToken(user);
+    
+                return { token, user };
+            } catch (error) {
+                console.error('Login error', error.message);
             }
-
-            const correctPassword = await user.isCorrectPassword(password);
-
-            if (!correctPassword) {
-                throw AuthenticationError;
-            }
-
-            const token = signToken(user);
-
-            return  { token, user };
         },
         createUser: async(parent, args) => {
             const user = await User.create(args);
