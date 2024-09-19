@@ -4,15 +4,27 @@ import SquarePaymentForm from './UI/SquarePaymentForm';
 
 export default function PaymentPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [paymentSuccessful, setPaymentSuccessful] = useState(false);
 
   const handleOpenModal = () => {
     setIsModalOpen(true);
   };
 
-  const handleCloseModal = (paymentSuccessful = false) => {
+  const handleCloseModal = (wasPaymentSuccessful = false) => {
     setIsModalOpen(false);
-    if (paymentSuccessful) {
-        message.success('Payment was successful!');
+
+    // Show success message only if payment was successful
+    if (wasPaymentSuccessful) {
+      message.success('Payment was successful!');
+    }
+  };
+
+  const handlePaymentSuccess = (success) => {
+    if (success) {
+      setPaymentSuccessful(true);
+      handleCloseModal(true);  // Pass true to indicate payment success
+    } else {
+      handleCloseModal(false); // Pass false to indicate payment failure
     }
   };
 
@@ -23,11 +35,11 @@ export default function PaymentPage() {
         title="Complete Your Payment" 
         open={isModalOpen} 
         footer={null} 
-        onCancel={handleCloseModal} 
+        onCancel={() => handleCloseModal(false)} 
         destroyOnClose={true}
       >
-        <SquarePaymentForm amount={1000} onPaymentSuccess={(success) => handleCloseModal(success)} />
+        <SquarePaymentForm amount={1000} onPaymentSuccess={handlePaymentSuccess} />
       </Modal>
     </div>
   );
-};
+}
