@@ -1,10 +1,18 @@
+import HomeImage from "../components/HomeImage";
+import AboutUs from "../components/AboutUs";
+import WhyOsteo from "../components/WhyOsteo";
+
+
 export default function Home() {
 
+  
+
     return (
-        <div >
-        <h1>
-           Home
-        </h1>
-      </div>
+      <div>
+        <HomeImage/>
+        <AboutUs/>
+        <WhyOsteo/>
+        
+      </div>  
     )
 }

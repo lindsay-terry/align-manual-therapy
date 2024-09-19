@@ -8,6 +8,34 @@ import { CREATE_USER } from '../utils/mutations';
 import Auth from '../utils/auth';
 
 export default function Signup() {
+  const styles = {
+    background: {
+        backgroundColor: 'var(--another-green)',
+        height: '100vh', // viewport height
+        
+    },
+    container: {
+      maxWidth: '600px',
+      margin: 'auto',
+      padding: '20px',
+    },
+    formWrapper: {
+    backgroundColor: 'var(--isabelline)', 
+    borderRadius: '5%',
+    padding: '20px',
+    boxShadow: '0 2px 10px var(--black-olive)', 
+    },
+    btn: {
+      color: 'var(--papaya-whip)',
+            backgroundColor: 'var(--black-bean)',
+    },
+    customHeading: {
+      display: 'flex',
+      justifyContent: 'center',
+    },
+
+  };  
+
     // Create instance of AntD form
     const [form] = Form.useForm();
     dayjs.extend(customParseFormat);
@@ -86,112 +114,116 @@ export default function Signup() {
       
       
     return (
-        <div style={{ maxWidth: '600px', margin: 'auto', padding: '20px' }}>
-        <h2>Sign Up</h2>
-        <Form
-          name="signup"
-          form={form}
-          layout="vertical"
-        >
-          <Row gutter={16}>
-            <Col span={12}>
-              <Form.Item
-                label="First Name"
-                name="firstName"
-                rules={[{ required: true, message: 'Please input your first name!' }]}
-              >
-                <Input name="firstName" onChange={handleChange}/>
-              </Form.Item>
-            </Col>
-            <Col span={12}>
-              <Form.Item
-                label="Last Name"
-                name="lastName"
-                rules={[{ required: true, message: 'Please input your last name!' }]}
-              >
-                <Input name="lastName" onChange={handleChange}/>
+      <div style={styles.background}>
+        <div style={styles.container}>
+          <h2 style={styles.customHeading}>Sign Up</h2>
+          <div style={styles.formWrapper}>
+          <Form
+            name="signup"
+            form={form}
+            layout="vertical"
+          >
+            <Row gutter={16}>
+              <Col span={12}>
+                <Form.Item
+                  label="First Name"
+                  name="firstName"
+                  rules={[{ required: true, message: 'Please input your first name!' }]}
+                >
+                  <Input name="firstName" onChange={handleChange}/>
                 </Form.Item>
-            </Col>
-          </Row>
-  
-          <Form.Item
-            label="Email"
-            name="email"
-            rules={[
-              { required: true, message: 'Please input your email!' },
-              { type: 'email', message: 'Please enter a valid email!' },
-            ]}
-          >
-            <Input name="email" onChange={handleChange}/>
-            </Form.Item>
-  
-          <Form.Item
-            label="Password"
-            name="password"
-            rules={[{ required: true, message: 'Please input your password!' },
-                // Validate password is between 8 and 24 characters
-                {
-                    min: 8,
-                    max: 24,
-                    message: 'Password must be between 8 and 24 characters.',
-                },
-            ]}
-          >
-            <Input.Password name="password" onChange={handleChange} />
-            </Form.Item>
-
-            {/* Confirm password  */}
+              </Col>
+              <Col span={12}>
+                <Form.Item
+                  label="Last Name"
+                  name="lastName"
+                  rules={[{ required: true, message: 'Please input your last name!' }]}
+                >
+                  <Input name="lastName" onChange={handleChange}/>
+                  </Form.Item>
+              </Col>
+            </Row>
+    
             <Form.Item
-            label="Confirm Password"
-            name="confirmPassword"
-            dependencies={['password']}
-            hasFeedback
-            rules={[{ required: true, message: 'Please confirm your password.' },
-                // Validate passwords match
-                ({ getFieldValue }) => ({
-                    validator(_, value) {
-                        if (!value || getFieldValue('password') === value) {
-                            return Promise.resolve();
-                        }
-                        return Promise.reject(new Error('The two passwords you have entered do not match.  Please try again.'));
-                    }
-                })
-            ]}
-          >
-            <Input.Password name="confirmPassword"/>
-            </Form.Item>
-  
-          <Form.Item
-            label="Phone Number"
-            name="phone"
-            rules={[{ required: true, message: 'Please input your phone number!' }]}
-          >
-            <Input 
-                name="phone"
-                value={phoneValue}
-                onChange={handlePhoneChange}
-                maxLength={12}
-                />
-            </Form.Item>
-  
-          <Form.Item
-            label="Birthdate"
-            name="birthdate"
-            rules={[{ required: true, message: 'Please select your birthdate!' }]}
-          >
-                <DatePicker 
-                format="MM-DD-YYYY"
-                getValueProps={(value) => ({ value: value ? dayjs(value) : "" })}
-                onChange={handleDateChange}
-                />
-            </Form.Item>
-  
-          <Form.Item>
-            <Button type="primary" htmlType="submit" block onClick={handleFormSubmit}>
-              Submit
-            </Button>
-            </Form.Item>
-        </Form>
+              label="Email"
+              name="email"
+              rules={[
+                { required: true, message: 'Please input your email!' },
+                { type: 'email', message: 'Please enter a valid email!' },
+              ]}
+            >
+              <Input name="email" onChange={handleChange}/>
+              </Form.Item>
+    
+            <Form.Item
+              label="Password"
+              name="password"
+              rules={[{ required: true, message: 'Please input your password!' },
+                  // Validate password is between 8 and 24 characters
+                  {
+                      min: 8,
+                      max: 24,
+                      message: 'Password must be between 8 and 24 characters.',
+                  },
+              ]}
+            >
+              <Input.Password name="password" onChange={handleChange} />
+              </Form.Item>
+
+              {/* Confirm password  */}
+              <Form.Item
+              label="Confirm Password"
+              name="confirmPassword"
+              dependencies={['password']}
+              hasFeedback
+              rules={[{ required: true, message: 'Please confirm your password.' },
+                  // Validate passwords match
+                  ({ getFieldValue }) => ({
+                      validator(_, value) {
+                          if (!value || getFieldValue('password') === value) {
+                              return Promise.resolve();
+                          }
+                          return Promise.reject(new Error('The two passwords you have entered do not match.  Please try again.'));
+                      }
+                  })
+              ]}
+            >
+              <Input.Password name="confirmPassword"/>
+              </Form.Item>
+    
+            <Form.Item
+              label="Phone Number"
+              name="phone"
+              rules={[{ required: true, message: 'Please input your phone number!' }]}
+            >
+              <Input 
+                  name="phone"
+                  value={phoneValue}
+                  onChange={handlePhoneChange}
+                  maxLength={12}
+                  />
+              </Form.Item>
+    
+            <Form.Item
+              label="Birthdate"
+              name="birthdate"
+              rules={[{ required: true, message: 'Please select your birthdate!' }]}
+            >
+                  <DatePicker 
+                  format="MM-DD-YYYY"
+                  getValueProps={(value) => ({ value: value ? dayjs(value) : "" })}
+                  onChange={handleDateChange}
+                  />
+              </Form.Item>
+    
+            <Form.Item>
+              <Button style={styles.btn} htmlType="submit" block onClick={handleFormSubmit}>
+                Submit
+              </Button>
+              </Form.Item>
+          </Form>
+          </div>
       </div>
+      </div>  
     )
 }
