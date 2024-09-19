@@ -94,6 +94,7 @@ export const QUERY_APPOINTMENTS = gql`
                 _id
                 name
                 description
+                cleanup
                 options {
                     duration
                     price

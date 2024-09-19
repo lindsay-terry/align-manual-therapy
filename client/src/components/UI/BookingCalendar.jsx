@@ -7,7 +7,8 @@ import { useState } from 'react';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
-import { generateTimeSlots } from '../../utils/timeslots';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
+import { generateTimeSlots, appointmentDuration } from '../../utils/timeslots';
 import { useQuery, useMutation } from '@apollo/client';
 import { QUERY_APPOINTMENTS } from '../../utils/queries';
 import { CREATE_APPOINTMENT } from '../../utils/mutations';
@@ -31,15 +32,34 @@ export default function BookingCalendar({ selectedValue }) {
             flexWrap: 'wrap',
             justifyContent: 'center',
             gap: '10px',
+        },
+        modalFooter: {
+            display: 'flex',
+            justifyContent: 'space-evenly',
+            padding: '10px',
+        },
+        customBtn: {
+            backgroundColor: 'var(--seasalt)',
+            padding: '20px',
+        },
+        cancelBtn: {
+            backgroundColor: 'var(--bittersweet)',
+            padding: '20px',
+            color: 'var(--seasalt)',
+        },
+        confirmBtn: {
+            backgroundColor: 'var(--olive-2)',
+            color: 'var(--seasalt)',
+            padding: '20px',
         }
     }
 
     dayjs.extend(utc);
     dayjs.extend(timezone);
+    dayjs.extend(customParseFormat);
     // Querying existing appointments
     const { loading, data, refetch } = useQuery(QUERY_APPOINTMENTS);
     const appointments = data ? data.appointments : [];
-    // console.log('APPOINTMENTS', appointments);
 
     const [createAppointment] = useMutation(CREATE_APPOINTMENT);
 
@@ -49,29 +69,71 @@ export default function BookingCalendar({ selectedValue }) {
     const [selectedSlot, setSelectedSlot] = useState(null);
     const [showModal, setShowModal] = useState(false);
     const [bookedDays, setBookedDays] = useState([]);
-    const [bookedTimes, setBookedTimes] = useState([]);
 
     const navigate = useNavigate();
 
     const handleSelect = async (value, event) => {
-        // Generating time slots
+        // Format the day selected to just the day
+        const selectedDate = dayjs(value).format('YYYY-MM-DD');
+        // Generate time slots for the day
         const slots = generateTimeSlots(value);
+        // Temporary array to store the day's appointments
+        let daysAppointments = [];
+        // Check through all appointments to find appointments for selected day
+        for (let i = 0; i < appointments.length; i++) {
+            // Check the day in all the appointments and add them to our daily array
+            if (dayjs(appointments[i].date).format('YYYY-MM-DD') === selectedDate) {
+                daysAppointments.push(appointments[i]);
+            }
+        };
 
-        setBookedDays(new Set(appointments.map(appointment => dayjs(appointment.date).tz('America/Denver').format('YYYY-MM-DD'))));
-        setBookedTimes(new Set(appointments.map(appointment => dayjs(appointment.date).tz('America/Denver').format('HH:mm'))));
+        let bookedSlots = [];
+
+        daysAppointments.forEach(appointment => {
+            // Aquire start and end times for each appointment
+            const startTime = appointment.time;
+            // Calculate end time of appointment based on duration and cleanup time
+            const endTime = appointmentDuration(startTime, appointment.duration, appointment.service.cleanup);
+            // Add to array of booked timeslots
+            bookedSlots.push({ start: startTime, end: endTime });
+
+        });
 
         slots.forEach(slot => {
-            const slotDay= dayjs(slot.time).tz('America/Denver').format('YYYY-MM-DD');
-            const slotTime = dayjs(slot.time).tz('America/Denver').format('HH:mm');
+            const slotStartTime = dayjs(slot.time);
+            // console.log(slotStartTime, 'SLOTSTARTTIME')
+            const slotEndTime = slotStartTime.add(45, 'minutes');
 
-            // console.log(slotDay, slotTime);
-            if(bookedDays === slotDay && bookedTimes === slotTime) {
-                // console.log(`Marking slot as booked: ${slotDay}`);
-                slot.booked = true;
-            } else {
-                slot.booked = false;
+            if (!slotStartTime.isValid()) {
+                console.error('Invalid start time:', slot.time);
+                return;
             }
-        });
+            // formatted for console.logs and messages
+            const formattedSlotTime = slotStartTime.format('hh:mm A');
+
+            const isBooked = bookedSlots.some(appointment => {
+                const appointmentStartTime = appointment.start;
+                const appointmentEndTime = appointment.end;
+
+                // Get the date from the slotStartTime
+                const slotDate = slotStartTime.format('YYYY-MM-DD');
+                const dayjsAppointmentStart = dayjs(`${slotDate} ${appointmentStartTime}`, 'YYYY-MM-DD hh:mm A');
+                const dayjsAppointmentEnd = dayjs(`${slotDate} ${appointmentEndTime}`, 'YYYY-MM-DD hh:mm A');
+
+                return (
+                    // Check appointment times against slot times and figure out overlap to consider a slot booked
+                    (slotStartTime.format('hh:mm A') === (appointmentStartTime)) ||
+                    (slotStartTime.format('HH:mm') > (dayjsAppointmentStart.format('HH:mm')) && slotStartTime.format('HH:mm') < dayjsAppointmentEnd.format('HH:mm')) ||
+                    (slotEndTime.format('HH:mm') > dayjsAppointmentStart.format('HH:mm') && slotEndTime.format('HH:mm') < dayjsAppointmentEnd.format('HH:mm')) || // Slot ends during the appointment
+                    (slotStartTime.format('HH:mm') < dayjsAppointmentStart.format('HH:mm') && slotEndTime.format('HH:mm') > dayjsAppointmentEnd.format('HH:mm')) // Slot completely encompasses the appointment
+                );
+   
+            });
+
+            slot.booked = isBooked;
+            console.log(`Slot Time: ${formattedSlotTime}, Is Booked: ${isBooked}`);
+
+        })
 
         setDay(value);
         setDisplayDay(dayjs(value).format('MM/DD/YYYY'));
@@ -92,19 +154,16 @@ export default function BookingCalendar({ selectedValue }) {
         const formattedTime = selectedSlot ? selectedSlot.time : null; 
         
         const parsedDate = dayjs(day).toISOString();
-        // console.log('PARSEDDATE:', parsedDate);
-        
-
+    
         const variables = {
             service: selectedValue.id,
             user: user.data._id,
             date: parsedDate,
-            time: dayjs(formattedTime).tz('America/Denver').format('HH:mm'),
+            time: dayjs(formattedTime).tz('America/Denver').format('hh:mm A'),
             price: selectedValue.price,
             duration: selectedValue.duration,
             
         };
-        console.log(variables.time);
         if (!selectedValue || !user.data._id || !day || !formattedTime) {
             console.error('Invalid input data', {
                 selectedValue,
@@ -134,19 +193,23 @@ export default function BookingCalendar({ selectedValue }) {
     return (
         <div >
             <div style={styles.container}>
-                <Calendar onChange={handleSelect} />
+                <Calendar locale="en-US" onChange={handleSelect} minDate={new Date()}/>
             </div>
             {day ? (
             <div style={styles.appointmentContainer}>
                 <h3>See appointment times for {displayDay}</h3>
                 <div style={styles.appointmentTimes}>
-                    {availableSlots.filter(slot => !slot.booked).map((slot) => (
-                        <div key={slot.time.toISOString()}> 
-                            <Button onClick={() => handleSlotSelect(slot)} disabled={slot.booked}>
-                                {slot.time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                            </Button>
-                        </div>
-                    ))}
+                    {availableSlots.filter(slot => !slot.booked).length === 0 ? (
+                    <div>No slots available</div>
+                ) : (
+                        availableSlots.filter(slot => !slot.booked).map((slot) => (
+                            <div key={slot.time.toISOString()}> 
+                                <Button style={styles.customBtn} onClick={() => handleSlotSelect(slot)} disabled={slot.booked}>
+                                    {slot.time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                </Button>
+                            </div>
+                        ))
+                )}
                 </div>
             </div>
             ) : null }
@@ -154,17 +217,21 @@ export default function BookingCalendar({ selectedValue }) {
             <Modal
                 title='Confirm Appointment'
                 open={showModal}
-                onOk={handleConfirm}
+                // onOk={handleConfirm}
                 onCancel={handleCancel}
+                footer={[
+                    <div style={styles.modalFooter}>
+                        <Button style={styles.cancelBtn} key='cancel' onClick={handleCancel}>Cancel</Button>
+                        <Button style={styles.confirmBtn} key='ok' onClick={handleConfirm}>Confirm</Button>
+                    </div>
+                ]}
             >
                 <p>Service: {selectedValue.name} - {selectedValue.duration} minutes</p>
                 <p>Date: {displayDay}</p>
                 <p>Time: {selectedSlot ? selectedSlot.time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : ''}</p>
                 <p>Price: ${selectedValue.price}</p>
-                <p>Practitioner:</p>
-
+                {/* <p>Practitioner:</p> */}
             </Modal>
-
         </div>
     );
 }       
