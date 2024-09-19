@@ -21,6 +21,14 @@ const appointmentSchema = new Schema({
         type: String,
         required: true,
     },
+    duration: {
+        type: Number,
+        required: true,
+    },
+    price: {
+        type: Number,
+        required: true,
+    },
 }, { timestamps: true, });
 
 const Appointment = model('Appointment', appointmentSchema);

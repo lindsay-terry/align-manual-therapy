@@ -8,7 +8,7 @@ const typeDefs =`
         role: Int!
         phone: String!
         birthdate: String!
-        services: [Service]
+        appointments: [Appointment]
     }
 
     type Option {
@@ -22,6 +22,8 @@ const typeDefs =`
         user: User
         date: String!
         time: String!
+        duration: Int!
+        price: Float!
     }
 
     type Service {
@@ -56,7 +58,7 @@ const typeDefs =`
         login(email: String!, password: String!): Auth
         createUser( firstName: String!, lastName: String!, email: String!, password: String!, phone: String!, birthdate: String!): Auth
         processPayment(sourceId: String!, amount: Int!): PaymentResult!
-        createAppointment(service: ID!, user: ID!, date: String!, time: String!): Appointment
+        createAppointment(service: ID!, user: ID!, date: String!, time: String!, duration: Int!, price: Float!): Appointment
     }
 `;
 

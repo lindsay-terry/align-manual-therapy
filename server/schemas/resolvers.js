@@ -41,9 +41,14 @@ const resolvers = {
         },
         appointments: async () => {
           try {
-              return await Appointment.find()
+              const appointments = await Appointment.find()
               .populate('user')
               .populate('service');
+
+              return appointments.map(appointment => ({
+                ...appointment.toObject(),
+                date: appointment.date.toISOString(),
+              }));
           } catch (error) {
               throw new Error('Failed to fetch appointment data.');
           }
@@ -114,9 +119,20 @@ const resolvers = {
         },
         createAppointment: async(parent, args) => {
           try {
-              const appointment = await Appointment.create(args);
+              const dateObject = new Date(args.date);
+              const appointment = await Appointment.create({
+                ...args,
+                date: dateObject,
+              });
 
-              return appointment;
+              const newAppointment = await Appointment.findById(appointment._id)
+                .populate('user')
+                .populate('service');
+                // Add appointment to user's appointment array
+              const updateUser = await User.findByIdAndUpdate(args.user, {
+                $addToSet: { appointments: newAppointment._id }}, { new: true });
+                // console.log('UPDATED USER', updateUser);
+              return newAppointment;
           } catch (error) {
               console.error('Error creating appointment', error);
           }
