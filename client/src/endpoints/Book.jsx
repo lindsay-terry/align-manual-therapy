@@ -4,7 +4,7 @@ export default function Book() {
 
     const styles={
         container: {
-            backgroundColor: 'var(--alabaster)',
+            backgroundColor: 'var(--isabelline)',
             padding: '20px',
             display: 'flex',
             justifyContent: 'center'

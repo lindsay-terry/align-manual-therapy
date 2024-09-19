@@ -10,6 +10,9 @@
     --asparagus-2: #80AC64ff;
     --black-bean: #491510ff;
     --another-green: rgb(199, 221, 196);
+    --seasalt: #FBFAF8;
+    /* for cancel buttons  */
+    --bittersweet: #df3529;
 
     /* Not sure if using/not using yet  */
     --caf-noir: #54390Dff;
@@ -27,13 +30,11 @@
 
     /* better greens and a pinkish */
     --asparagus: #6E9569ff;
-
-    --sky-magenta: #C77FABff;
-
 }
 
 body {
     font-family: "Quicksand", sans-serif;
     font-weight: 400;
     color: var(--eerie-black);
+    /* background-color: var(--isabelline); */
 }

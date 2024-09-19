@@ -1,9 +1,11 @@
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
+dayjs.extend(customParseFormat);
 
 // Create timeslots in 45 minute increments
 export const generateTimeSlots = (date) => {
@@ -22,4 +24,15 @@ export const generateTimeSlots = (date) => {
     }
     return slots;
 };
+
+// Calculate appointment duration including entire appointment time and cleanup
+export const appointmentDuration = (timeString, duration, cleanup) => {
+
+    const time = dayjs(timeString, 'hh:mm A')
+    const totalMinutes = duration + cleanup;
+
+    const endTime = time.add(totalMinutes, 'minute');
+
+    return dayjs(endTime).format('hh:mm A');
+}
 

@@ -10,15 +10,17 @@ export default function BookServices() {
     const styles={
         nextBtn: {
             borderColor: 'var(--black-bean)',
-            color: 'var(--papaya-whip)',
-            backgroundColor: 'var(--asparagus-2)',
+            color: 'var(--seasalt)',
+            backgroundColor: 'var(--olive-2)',
+            padding: '20px',
+            fontSize: '150%,'
         },
         container: {
             display: 'flex',
             flexDirection: 'column',
             padding: '20px',
             margin: '25px',
-            backgroundColor: 'var(--isabelline)',
+            backgroundColor: 'var(--seasalt)',
             boxShadow: '0 1px 10px var(--black-olive)',
             maxWidth: '450px',
             borderRadius: '5%'
