@@ -1,8 +1,7 @@
 const db = require('../config/connection');
-const { User, Service, Appointment } = require('../models');
+const { User, Service } = require('../models');
 const userSeeds = require('./userSeeds.json');
 const serviceSeeds = require('./serviceSeeds.json');
-const appointmentSeeds = require('./appointmentSeeds.json');
 const cleanDB = require('./cleanDb');
 
 db.once('open', async () => {
@@ -14,7 +13,6 @@ db.once('open', async () => {
 
         await User.create(userSeeds);
         await Service.create(serviceSeeds);
-        await Appointment.create(appointmentSeeds)
 
     } catch (error) {
         console.error(error);

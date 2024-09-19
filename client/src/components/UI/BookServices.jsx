@@ -61,10 +61,22 @@ export default function BookServices() {
     }, [selectedValue]);
 
     const handleChange = (event) => {
-        setSelectedValue(event.target.value);
-        console.log('Selected value:', event.target.value);
-        console.log(selectedValue);
-    };
+        const { value } = event.target;
+        const [serviceName, duration] = value.split('-');
+        const selectedService = services.find(service => service.name === serviceName);
+        
+        const option = selectedService.options.find(option => option.duration.toString() === duration);
+
+        if (selectedService && option) {
+            const serviceData = {
+                id: selectedService._id,
+                name: selectedService.name,
+                duration: option.duration,
+                price: option.price,
+            };
+            setSelectedValue(serviceData);
+        }
+    }
 
     const handleSubmit = (event) => {
         if (selectedValue) {
@@ -119,4 +131,4 @@ export default function BookServices() {
         )}
         </div>
     )
-}
+};
