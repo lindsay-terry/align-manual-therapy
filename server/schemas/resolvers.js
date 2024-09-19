@@ -1,6 +1,7 @@
 const { User, Service, Appointment } = require('../models');
 const { signToken, AuthenticationError } = require('../utils/auth');
 const { Client, Environment, ApiError } = require("square");
+const { randomUUID } = require('crypto');  // Import randomUUID for single use for payments
 
 const client = new Client({
     environment: Environment.Sandbox,
@@ -83,37 +84,37 @@ const resolvers = {
 
             return { token, user };
         },
-        async processPayment(_, { sourceId, amount }) {
+        processPayment: async(_, { sourceId, amount }) => {
             try {
-              const { paymentsApi } = client;
-              const paymentResponse = await paymentsApi.createPayment({
-                sourceId,
-                idempotencyKey: new Date().getTime().toString(), // Prevent duplicate payments
-                amountMoney: {
-                  amount, // Amount in cents
-                  currency: 'USD',
-                },
-              });
-      
-              return {
-                success: true,
-                transactionId: paymentResponse.result.payment.id,
-                errorMessage: null,
-              };
+                const { paymentsApi } = client;
+                const paymentResponse = await paymentsApi.createPayment({
+                    idempotencyKey: randomUUID(),  // Use randomUUID for idempotency
+                    sourceId,
+                    amountMoney: {
+                        currency: 'USD',
+                        amount, // Amount in cents (e.g., 100 = $1.00)
+                    },
+                });
+        
+                return {
+                    success: true,
+                    transactionId: paymentResponse.result.payment.id,
+                    errorMessage: null,
+                };
             } catch (error) {
-              if (error instanceof ApiError) {
-                return {
-                  success: false,
-                  transactionId: null,
-                  errorMessage: error.result.errors[0].detail,
-                };
-              } else {
-                return {
-                  success: false,
-                  transactionId: null,
-                  errorMessage: "Unexpected error occurred",
-                };
-              }
+                if (error instanceof ApiError) {
+                    return {
+                    success: false,
+                    transactionId: null,
+                    errorMessage: error.result.errors[0].detail|| 'Payment failed.',
+                    };
+                } else {
+                    return {
+                    success: false,
+                    transactionId: null,
+                    errorMessage: "Unexpected error occurred",
+                    };
+                }
             }
         
         },
