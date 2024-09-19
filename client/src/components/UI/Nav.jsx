@@ -74,13 +74,33 @@ export default function Nav() {
     )
     ];
 
+    // Create items for the Menu component
+    const menuItems = navItems.map(item => ({
+        key: item.path,
+        label: Auth.loggedIn() && item.path === '/login' ? (
+            <Button onClick={handleLogout} style={styles.inactiveLink}>Logout</Button>
+        ) : (
+            <Link to={item.path} style={location.pathname === item.path ? styles.activeLink : styles.inactiveLink}>
+                {item.label}
+            </Link>
+        )
+    }));
+
+    // Add the logout button if the user is logged in
+    if (Auth.loggedIn()) {
+        menuItems.push({
+            key: 'logout',
+            label: <Button onClick={handleLogout} style={styles.inactiveLink}>Logout</Button>
+        });
+    }
+
 
 
     return (
         <Flex justify={isSmallScreen ? 'flex-end' : 'center'}>
             {/* Navigation menu button for small screens  */}
             <div display='block' >
-            <Button icon={<MenuOutlined />} onClick={showDrawer} style={styles.menuButton} />
+                <Button icon={<MenuOutlined />} onClick={showDrawer} style={styles.menuButton} />
             </div>
             
             {/* Navigation menu links for larger screens  */}
@@ -97,20 +117,7 @@ export default function Nav() {
 
             {/* Use drawer component for menu on smaller screens */}
             <Drawer title='Menu' placement='right' closable={true} onClose={closeDrawer} open={open}>
-                <Menu mode='vertical' selectedKeys={[location.pathname]}>
-                    {navItems.map((item) => (
-                        <Menu.Item key={item.path}  >
-                            <Link to={item.path} style={location.pathname === item.path ? styles.activeLink : styles.inactiveLink } >
-                                {item.label}
-                            </Link>
-                        </Menu.Item>
-                    ))}
-                        {Auth.loggedIn() && (
-                        <Menu.Item key="logout">
-                            <Button onClick={handleLogout} style={styles.inactiveLink}>Logout</Button>
-                        </Menu.Item>
-                    )}
-                </Menu>
+                <Menu mode='vertical' selectedKeys={[location.pathname]} items={menuItems} />
             </Drawer>
         </Flex>
     )
