@@ -45,3 +45,13 @@ export const CREATE_APPOINTMENT = gql`
         }
     }
 `;
+
+export const PROCESS_PAYMENT = gql`
+  mutation ProcessPayment($sourceId: String!, $amount: Int!) {
+    processPayment(sourceId: $sourceId, amount: $amount) {
+      success
+      transactionId
+      errorMessage
+    }
+  }
+`;

@@ -1,16 +1,7 @@
 import React from 'react';
-import { gql, useMutation } from '@apollo/client';
+import { useMutation } from '@apollo/client';
+import { PROCESS_PAYMENT } from '../../utils/mutations';
 import { PaymentForm, CreditCard } from 'react-square-web-payments-sdk';
-
-const PROCESS_PAYMENT = gql`
-  mutation ProcessPayment($sourceId: String!, $amount: Int!) {
-    processPayment(sourceId: $sourceId, amount: $amount) {
-      success
-      transactionId
-      errorMessage
-    }
-  }
-`;
 
 export default function SquarePaymentForm({ amount, onPaymentSuccess }) {
   const [processPayment] = useMutation(PROCESS_PAYMENT);
@@ -25,7 +16,10 @@ export default function SquarePaymentForm({ amount, onPaymentSuccess }) {
       });
 
       if (data.processPayment.success) {
-        console.log('Payment successful:', data.processPayment.transactionId);
+        console.log('Payment successful!');
+        console.log('Transaction Id:', data.processPayment.transactionId);
+        console.log('Amount of:', new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(amount / 100));
+
         // Close the modal on successful payment
         onPaymentSuccess(true);
       } else {
