@@ -16,6 +16,11 @@ const typeDefs =`
         price: Float!
     }
 
+    input OptionInput {
+        duration: Int!
+        price: Float!
+    }
+
     type Appointment {
         _id: ID!
         service: Service
@@ -35,6 +40,19 @@ const typeDefs =`
         practitioner: [User]
     }
 
+    input UpdateServiceInput {
+        name: String!
+        description: String!
+        options: [OptionInput]!
+        cleanup: Int!
+    }
+
+    type Contact {
+        name: String
+        email: String
+        message: String
+    }
+
     type Auth {
         token: ID!
         user: User
@@ -46,6 +64,7 @@ const typeDefs =`
         services: [Service]
         me: User
         appointments: [Appointment]
+        getContacts: [Contact]
     }
     
     type PaymentResult {
@@ -59,19 +78,7 @@ const typeDefs =`
         createUser( firstName: String!, lastName: String!, email: String!, password: String!, phone: String!, birthdate: String!): Auth
         processPayment(sourceId: String!, amount: Int!): PaymentResult!
         createAppointment(service: ID!, user: ID!, date: String!, time: String!, duration: Int!, price: Float!): Appointment
-    }
-
-    type Contact {
-        name: String
-        email: String
-        message: String
-    }
-
-    type Query {
-        getContacts: [Contact]
-    }
-
-    type Mutation {
+        updateService(id: ID!, input: UpdateServiceInput!): Service
         submitContact(name: String!, email: String!, message: String!): String
     }
 `;

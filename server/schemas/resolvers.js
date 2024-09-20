@@ -21,16 +21,10 @@ const resolvers = {
         // View own account
         me: async (parent, args, context) => {
             if (context.user) {
-                return User.findOne({ _id: context.user._id }).populate('service');
+                return User.findOne({ _id: context.user._id }).populate('appointment');
             }
             throw AuthenticationError;
         },
-        // Query a service -- not sure if we'll use
-        // If we do, add to typeDefs and client side queries
-        // service: async (parent, { name }) => {
-        //     const params = name ? { name } : {};
-        //     return Service.find(params);
-        // },
         // Query all services
         services: async () => {
             try {
@@ -166,6 +160,24 @@ const resolvers = {
             } catch (error) {
             console.error("Error saving contact:", error);
             throw new Error("Failed to submit contact form.");
+            }
+        },
+        // Update Service
+        updateService: async (parent, { id, input }) => {
+            try {
+                const updatedService = await Service.findByIdAndUpdate(id, input, {
+                    new: true,
+                    runValidators: true,
+                });
+                if (!updatedService) {
+                    throw new Error('Service not found');
+                    
+                    
+                }
+                return updatedService;
+            } catch (error) {
+                console.error('Error updating service:', error);
+                throw new Error(error.message);
             }
         },
     },
