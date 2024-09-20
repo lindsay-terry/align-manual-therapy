@@ -1,5 +1,3 @@
-import Payment from '../components/Payment';
-
 export default function GiftCertificates() {
 
     const styles={
@@ -17,10 +15,11 @@ export default function GiftCertificates() {
     }
 
     return (
-        <div style={styles.container}>
-            <div >
-                <h2 style={styles.customHeading}>Gift Certificates</h2>
-                <Payment />
+        <div>
+            <div style={styles.container}>
+                <div >
+                    <h2 style={styles.customHeading}>Gift Certificates</h2>
+                </div>
             </div>
         </div>
     )
