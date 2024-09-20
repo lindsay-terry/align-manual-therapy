@@ -62,16 +62,24 @@ export default function Nav() {
     const navItems = [
         { path: '/', label: 'Home' },
         { path: '/book-massage', label: 'Book Massage' },
-        { path: '/gift-certificates', label: 'Gift Certificates' },
-        { path: '/reviews', label: 'Reviews' },
-        { path: '/education', label: 'Education' },
-        { path: '/blog', label: 'Blog' },
-        { path: '/contact', label: 'Contact' },
-        // If logged in, show logout button.  Vice versa
-        ...(Auth.loggedIn()
-        ? ''
-        : [{ path: '/login', label: 'Login' }]
-    )
+        // If Admin, don't show the following menu items
+        ...(Auth.loggedIn() && Auth.isAdmin()) ? '' : [
+            { path: '/gift-certificates', label: 'Gift Certificates' },
+            { path: '/reviews', label: 'Reviews' },
+            { path: '/education', label: 'Education' },
+            { path: '/contact', label: 'Contact' },
+        ],
+
+        // If admin, show admin menu items
+        ...(Auth.loggedIn() && Auth.isAdmin()) ? [
+            { path: '/view-calendar', label: 'View Calendar' },
+            { path: '/view-users', label: 'View Users'},
+            { path: '/view-services', label: 'View Services'},
+            { path: '/view-contacts', label: 'View Contacts'},
+            { path: '/view-profile', label: 'View Profile'}
+        ] : '',
+                // If logged in, show logout button.  Vice versa
+        ...(Auth.loggedIn() ? '' : [{ path: '/login', label: 'Login' }]),
     ];
 
     // Create items for the Menu component
