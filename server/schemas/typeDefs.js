@@ -60,6 +60,20 @@ const typeDefs =`
         processPayment(sourceId: String!, amount: Int!): PaymentResult!
         createAppointment(service: ID!, user: ID!, date: String!, time: String!, duration: Int!, price: Float!): Appointment
     }
+
+    type Contact {
+        name: String
+        email: String
+        message: String
+    }
+
+    type Query {
+        getContacts: [Contact]
+    }
+
+    type Mutation {
+        submitContact(name: String!, email: String!, message: String!): String
+    }
 `;
 
 module.exports = typeDefs;

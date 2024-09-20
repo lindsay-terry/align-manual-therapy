@@ -103,3 +103,13 @@ export const QUERY_APPOINTMENTS = gql`
         }
     }
 `;
+
+export const GET_CONTACTS = gql`
+  query GetContacts {
+    getContacts {
+      name
+      email
+      message
+    }
+  }
+`;

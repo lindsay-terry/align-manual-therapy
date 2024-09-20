@@ -1,4 +1,4 @@
-const { User, Service, Appointment } = require('../models');
+const { User, Service, Appointment, Contact } = require('../models');
 const { signToken, AuthenticationError } = require('../utils/auth');
 const { Client, Environment, ApiError } = require("square");
 const { randomUUID } = require('crypto');  // Import randomUUID for single use for payments
@@ -54,6 +54,16 @@ const resolvers = {
               throw new Error('Failed to fetch appointment data.');
           }
       },
+
+        getContacts: async () => {
+            try {
+            // Fetch all contacts from the database
+            return await Contact.find();
+            } catch (error) {
+            console.error("Error fetching contacts:", error);
+            throw new Error("Failed to fetch contacts.");
+            }
+        },
     }, 
 
     Mutation: {
@@ -138,6 +148,26 @@ const resolvers = {
               console.error('Error creating appointment', error);
           }
       },
+
+        submitContact: async (_, { name, email, message }) => {
+            try {
+            // Create a new contact record
+            const newContact = new Contact({
+                name,
+                email,
+                message,
+            });
+
+            // Save the contact to the database
+            await newContact.save();
+
+            // Return a success message
+            return "Contact message received!";
+            } catch (error) {
+            console.error("Error saving contact:", error);
+            throw new Error("Failed to submit contact form.");
+            }
+        },
     },
 };
 
