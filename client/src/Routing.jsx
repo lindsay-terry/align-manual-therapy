@@ -14,7 +14,7 @@ import Login from './endpoints/Login';
 import AdminCalendar from './endpoints/admin-endpoints/AdminCalendar';
 import AdminContacts from './endpoints/admin-endpoints/AdminContacts';
 import AdminServices from './endpoints/admin-endpoints/AdminServices';
-import AdminUsers from './endpoints/admin-endpoints/AdminServices';
+import AdminUsers from './endpoints/admin-endpoints/AdminUsers';
 import AdminProfile from './endpoints/admin-endpoints/AdminProfile';
 
 

@@ -61,3 +61,18 @@ export const SUBMIT_CONTACT = gql`
     submitContact(name: $name, email: $email, message: $message)
   }
 `;
+
+export const UPDATE_SERVICE = gql`
+    mutation updateService($id: ID!, $input: UpdateServiceInput!) {
+        updateService(id: $id, input: $input) {
+            _id
+            name
+            description
+            options{
+                price
+                duration
+            }
+            cleanup
+        }
+    }
+`
