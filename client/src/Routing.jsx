@@ -11,6 +11,7 @@ import Education from './endpoints/Education';
 import Blog from './endpoints/Blog';
 import Contact from './endpoints/Contact';
 import Login from './endpoints/Login';
+import ViewContacts from './endpoints/ViewContacts';
 
 
 const router = createBrowserRouter([
@@ -54,6 +55,10 @@ const router = createBrowserRouter([
             {
                 path: '/signup',
                 element: <Signup />,
+            },
+            {
+                path: '/view-contacts',
+                element: <ViewContacts />,
             },
         ],
     },
