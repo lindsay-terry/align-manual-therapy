@@ -8,10 +8,14 @@ import Book from './endpoints/Book';
 import GiftCertificates from './endpoints/GiftCertificates';
 import Reviews from './endpoints/Reviews';
 import Education from './endpoints/Education';
-import Blog from './endpoints/Blog';
 import Contact from './endpoints/Contact';
 import Login from './endpoints/Login';
-import ViewContacts from './endpoints/ViewContacts';
+// Admin only components
+import AdminCalendar from './endpoints/admin-endpoints/AdminCalendar';
+import AdminContacts from './endpoints/admin-endpoints/AdminContacts';
+import AdminServices from './endpoints/admin-endpoints/AdminServices';
+import AdminUsers from './endpoints/admin-endpoints/AdminServices';
+import AdminProfile from './endpoints/admin-endpoints/AdminProfile';
 
 
 const router = createBrowserRouter([
@@ -41,10 +45,6 @@ const router = createBrowserRouter([
                 element: <Education />,
             },
             {
-                path: '/blog',
-                element: <Blog />,
-            },
-            {
                 path: '/contact',
                 element: <Contact />,
             },
@@ -56,10 +56,27 @@ const router = createBrowserRouter([
                 path: '/signup',
                 element: <Signup />,
             },
+            //Admin only
+            {
+                path: '/view-calendar',
+                element: <AdminCalendar />,
+            },
+            {
+                path: '/view-users',
+                element: <AdminUsers />,
+            },
+            {
+                path: '/view-services',
+                element: <AdminServices />,
+            },
             {
                 path: '/view-contacts',
-                element: <ViewContacts />,
+                element: <AdminContacts />,
             },
+            {
+                path: '/view-profile',
+                element: <AdminProfile />,
+            }
         ],
     },
 ]);

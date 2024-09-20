@@ -32,6 +32,9 @@ class AuthService {
     localStorage.removeItem('id_token');
     window.location.reload();
   }
+  isAdmin() {
+    return this.getProfile().data.role === 1;
+  }
 }
 
 export default new AuthService();
