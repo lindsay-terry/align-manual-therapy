@@ -5,25 +5,25 @@ export default function HomeImage() {
     const styles = {
         backgroundImage: {
           backgroundImage: `url(${HomeImg})`,
-          backgroundSize: 'cover', // or 'contain'
+          backgroundSize: 'cover', 
           backgroundRepeat: 'no-repeat',
           backgroundPosition: 'center',
-          height: '80vh', // Adjust as needed
+          height: '80vh', 
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          color: 'white', // Optional: adjust text color for visibility
+          color: 'white', 
         },
         textContainer: {
           display: 'flex',
-          flexDirection: 'column', // Stack text vertically
-          alignItems: 'center', // Center align
+          flexDirection: 'column', 
+          alignItems: 'center', 
           
         },
         specialFont: {
           fontFamily: 'Arizonia, cursive', 
           fontSize: '300%',
-          textShadow: '2px 2px 15px rgba(0, 0, 0, 0.7)',  // Adjust as needed
+          textShadow: '2px 2px 15px rgba(0, 0, 0, 0.7)',  
         },
         heading: {
           textShadow: '2px 2px 15px rgba(0, 0, 0, 0.7)', 
