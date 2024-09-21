@@ -194,8 +194,8 @@ export default function BookingCalendar({ selectedValue }) {
 
             // update bookedTimes array
             setBookedDays(refetch());
-            // redirect to user's page (home page for now until it's set up)
-            navigate('/');
+            // redirect to user's page
+            navigate('/profile');
         } catch (error) {
             console.error('Error saving appointment HERE IS THE ERROR:', error);
         }

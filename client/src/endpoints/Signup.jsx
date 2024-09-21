@@ -1,16 +1,17 @@
 import { useState } from 'react';
-import { Form, Input, Button, DatePicker, Row, Col } from 'antd';
+import { Form, Input, Button, Row, Col } from 'antd';
+import DatePicker from "react-datepicker";
+import { registerLocale } from 'react-datepicker';
+import { enUS } from 'date-fns/locale';
+import "react-datepicker/dist/react-datepicker.css";
 import { useMutation } from '@apollo/client';
-import dayjs from 'dayjs';
-import customParseFormat from 'dayjs/plugin/customParseFormat';
-
 import { CREATE_USER } from '../utils/mutations';
 import Auth from '../utils/auth';
 
 export default function Signup() {
   const styles = {
     background: {
-        backgroundColor: 'var(--another-green)',
+        backgroundColor: 'var(--isabelline)',
         height: '100vh', // viewport height
         
     },
@@ -20,14 +21,15 @@ export default function Signup() {
       padding: '20px',
     },
     formWrapper: {
-    backgroundColor: 'var(--isabelline)', 
-    borderRadius: '5%',
-    padding: '20px',
-    boxShadow: '0 2px 10px var(--black-olive)', 
+      backgroundColor: 'var(--seasalt)', 
+      borderRadius: '5%',
+      padding: '20px',
+      boxShadow: '0 2px 7px var(--black-olive)', 
     },
     btn: {
-      color: 'var(--papaya-whip)',
-            backgroundColor: 'var(--black-bean)',
+      color: 'var(--seasalt)',
+      backgroundColor: 'var(--olive-2)',
+      padding: '20px'
     },
     customHeading: {
       display: 'flex',
@@ -35,11 +37,11 @@ export default function Signup() {
     },
 
   };  
-
+    // Register datepicker locale
+    registerLocale('en-US', enUS); 
     // Create instance of AntD form
     const [form] = Form.useForm();
-    dayjs.extend(customParseFormat);
-
+ 
     // Handle getting phone value to format the way we need
     const [phoneValue, setPhoneValue] = useState('');
     const [formState, setFormState] = useState({
@@ -50,37 +52,34 @@ export default function Signup() {
         phone: '',
         birthdate: '',
     });
-    const [createUser, { error, data }] = useMutation(CREATE_USER);
+
+    const [birthdate, setBirthdate] = useState(null);
+    const [createUser, { error }] = useMutation(CREATE_USER);
 
     const handleChange = (event) => {
         const { name, value } = event.target;
-    
-        setFormState({
-          ...formState,
-          [name]: value,
-        });
+        setFormState((prev) => ({ ...prev, [name]: value }))
     };
-    // Handle date change on it's own for antd datepicker
-    const handleDateChange = (date, dateString) => {
-        setFormState((prevState) => ({
-            ...prevState,
-            birthdate: dateString,
-        }));
+    // Handle date change
+    const handleDateChange = (date) => {
+      setBirthdate(date);
     };
 
     const handleFormSubmit = async (event) => {
-        event.preventDefault();
+      try {
+        const finalValues = {
+          ...formState,
+          
+          birthdate: birthdate,
+        };
         console.log(formState);
         
-        try {
-            const { data } = await createUser({
-            variables: { ...formState },
-            });
-        
-            Auth.login(data.createUser.token);
-        } catch (e) {
-            console.error(e);
-        }
+        const { data } = await createUser({ variables: {...finalValues } });
+        console.log(data);
+        Auth.login(data.createUser.token);
+      } catch (error) {
+        console.error(error);
+      }
     };
 
     // Function to format phone number using dashes
@@ -103,25 +102,26 @@ export default function Signup() {
 
     // Updates the phone number to correct format as it is typed
     const handlePhoneChange = (e) => {
-        const formattedPhone = formatPhoneNumber(e.target.value);
-        setPhoneValue(formattedPhone);
-        setFormState(prevState => ({
-            ...prevState,
-            phone: formattedPhone
-          }));
-        form.setFieldsValue({ phone: formattedPhone }); // Update the Form field
-      };
-      
+      const formattedPhone = formatPhoneNumber(e.target.value);
+      setPhoneValue(formattedPhone);
+      setFormState(prevState => ({
+          ...prevState,
+          phone: formattedPhone
+        }));
+      form.setFieldsValue({ phone: formattedPhone }); // Update the Form field
+    };
       
     return (
       <div style={styles.background}>
         <div style={styles.container}>
-          <h2 style={styles.customHeading}>Sign Up</h2>
+          <h2 style={styles.customHeading}>Get Started Today!</h2>
+          <h3 style={styles.customHeading}> Make an account</h3>
           <div style={styles.formWrapper}>
           <Form
             name="signup"
             form={form}
             layout="vertical"
+            onFinish={handleFormSubmit}
           >
             <Row gutter={16}>
               <Col span={12}>
@@ -209,15 +209,21 @@ export default function Signup() {
               name="birthdate"
               rules={[{ required: true, message: 'Please select your birthdate!' }]}
             >
-                  <DatePicker 
-                  format="MM-DD-YYYY"
-                  getValueProps={(value) => ({ value: value ? dayjs(value) : "" })}
-                  onChange={handleDateChange}
+                  <DatePicker
+                    selected={birthdate}
+                    locale="en-US"
+                    onChange={handleDateChange}
+                    dateFormat="MM/dd/yyyy"
+                    placeholderText='MM/DD/YYYY'
+                    isClearable
+                    showYearDropdown
+                    yearDropdownItemNumber={75} // Number of years to show in dropdown year selector
+                    scrollableYearDropdown
                   />
               </Form.Item>
     
             <Form.Item>
-              <Button style={styles.btn} htmlType="submit" block onClick={handleFormSubmit}>
+              <Button style={styles.btn} htmlType="submit" block >
                 Submit
               </Button>
               </Form.Item>

@@ -10,12 +10,12 @@ import Reviews from './endpoints/Reviews';
 import Education from './endpoints/Education';
 import Contact from './endpoints/Contact';
 import Login from './endpoints/Login';
+import UserProfile from './endpoints/UserProfile';
 // Admin only components
 import AdminCalendar from './endpoints/admin-endpoints/AdminCalendar';
 import AdminContacts from './endpoints/admin-endpoints/AdminContacts';
 import AdminServices from './endpoints/admin-endpoints/AdminServices';
 import AdminUsers from './endpoints/admin-endpoints/AdminUsers';
-import AdminProfile from './endpoints/admin-endpoints/AdminProfile';
 
 
 const router = createBrowserRouter([
@@ -56,6 +56,10 @@ const router = createBrowserRouter([
                 path: '/signup',
                 element: <Signup />,
             },
+            {
+                path: '/profile',
+                element: <UserProfile />,
+            },
             //Admin only
             {
                 path: '/view-calendar',
@@ -72,11 +76,7 @@ const router = createBrowserRouter([
             {
                 path: '/view-contacts',
                 element: <AdminContacts />,
-            },
-            {
-                path: '/view-profile',
-                element: <AdminProfile />,
-            }
+            }, 
         ],
     },
 ]);

@@ -44,11 +44,12 @@ const userSchema = new Schema({
         default: 0,
     },
     birthdate: {
-        type: Date,
+        type: String,
         required: [true, 'Please enter date of birth'],
     },
     appointments: [{ type: Schema.Types.ObjectId, ref: 'Appointment' }],
 });
+
 
 // Set up pre-save middleware to create password
 userSchema.pre('save', async function (next) {
