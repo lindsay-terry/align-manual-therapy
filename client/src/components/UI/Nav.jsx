@@ -3,7 +3,6 @@ import { useState, useEffect } from 'react';
 import { Drawer, Button, Menu, Flex } from 'antd';
 import { MenuOutlined } from '@ant-design/icons';
 import Auth from '../../utils/auth';
-{/* <CloseOutlined /> */}
 
 export default function Nav() {
     const location = useLocation();
@@ -76,10 +75,9 @@ export default function Nav() {
             { path: '/view-users', label: 'View Users'},
             { path: '/view-services', label: 'View Services'},
             { path: '/view-contacts', label: 'View Contacts'},
-            { path: '/view-profile', label: 'View Profile'}
         ] : '',
-                // If logged in, show logout button.  Vice versa
-        ...(Auth.loggedIn() ? '' : [{ path: '/login', label: 'Login' }]),
+                // If logged in, show logout button and profile endpoint
+        ...(Auth.loggedIn() ? [{ path: '/profile', label: 'My Profile' }] : [{ path: '/login', label: 'Login' }]),
     ];
 
     // Create items for the Menu component
@@ -118,8 +116,8 @@ export default function Nav() {
                         {item.label}
                     </Link>
                 ))}
-                       {Auth.loggedIn() && (
-                            <Button onClick={handleLogout} style={styles.inactiveLink}>Logout</Button>
+                    {Auth.loggedIn() && (
+                        <Button onClick={handleLogout} style={styles.inactiveLink}>Logout</Button>
                     )}
             </Flex>
 

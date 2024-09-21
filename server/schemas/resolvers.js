@@ -12,18 +12,23 @@ const resolvers = {
     Query: {
         // Find all users
         users: async () => {
-            return User.find().populate('service');
+            return User.find();
         },
         // Find one user by email
         user: async (parent, { email } ) => {
-            return User.findOne({ email }).populate('service');
+            return User.findOne({ email });
         },
         // View own account
         me: async (parent, args, context) => {
             if (context.user) {
-                return User.findOne({ _id: context.user._id }).populate('appointment');
+                try {
+                    const user = await User.findOne({ _id: context.user._id }).populate({ path: 'appointments', populate: { path: 'service', model: 'Service'}});
+                    return user;
+                } catch (error) {
+                    console.error('Error fetching user data', error);
+                    throw new Error('Failed to fetch user data'); 
+                }
             }
-            throw AuthenticationError;
         },
         // Query all services
         services: async () => {
@@ -82,8 +87,10 @@ const resolvers = {
                 console.error('Login error', error.message);
             }
         },
-        createUser: async(parent, args) => {
-            const user = await User.create(args);
+        createUser: async(parent, {firstName, lastName, phone, email, birthdate, password}) => {
+            const user = await User.create({
+                firstName, lastName, phone, email, birthdate, password
+            });
             const token = signToken(user);
 
             return { token, user };

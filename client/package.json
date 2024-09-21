@@ -20,6 +20,7 @@
         "react": "^18.2.0",
         "react-big-calendar": "^1.14.1",
         "react-calendar": "^5.0.0",
+        "react-datepicker": "^7.3.0",
         "react-dom": "^18.2.0",
         "react-router-dom": "^6.11.2",
         "react-square-web-payments-sdk": "^3.2.1"

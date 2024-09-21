@@ -8,7 +8,7 @@ import Auth from '../utils/auth';
 export default function Login() {
     const styles = {
         background: {
-            backgroundColor: 'var(--another-green)',
+            backgroundColor: 'var(--isabelline)',
             height: '90vh', // viewport height
             
         },
@@ -18,14 +18,15 @@ export default function Login() {
             padding: '20px',
         },
         formWrapper: {
-            backgroundColor: 'var(--isabelline)', 
+            backgroundColor: 'var(--seasalt)', 
             borderRadius: '5%',
             padding: '20px',
-            boxShadow: '0 2px 10px var(--black-olive)', 
+            boxShadow: '0 2px 7px var(--black-olive)', 
         },
         btn: {
-            color: 'var(--papaya-whip)',
-            backgroundColor: 'var(--black-bean)',
+            color: 'var(--seasalt)',
+            backgroundColor: 'var(--olive-2)',
+            padding: '20px'
         },
         customHeading: {
             display: 'flex',
@@ -80,7 +81,6 @@ export default function Login() {
                 <Form
                     name="login"
                     layout="vertical"
-                    // onSubmit={handleFormSubmit}
                     initialValues={formState}
                 >
                     <Form.Item

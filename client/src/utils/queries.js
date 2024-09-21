@@ -9,19 +9,16 @@ export const QUERY_USER = gql`
             lastName
             phone
             birthdate
-            services {
+            appointments {
                 _id
-                name
-                description
-                options {
-                    duration
-                    price
-                }
-            cleanup
-            practitioner {
-                _id
-                firstName
-                lastName
+                date
+                time
+                duration
+                price
+                service {
+                    _id
+                    name
+                    description
                 }
             }
         }     
