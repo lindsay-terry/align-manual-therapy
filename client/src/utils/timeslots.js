@@ -8,14 +8,17 @@ dayjs.extend(timezone);
 dayjs.extend(customParseFormat);
 
 // Create timeslots in 45 minute increments
-export const generateTimeSlots = (date) => {
+export const generateTimeSlots = (date, duration, cleanup) => {
     const slots = [];
 
     const startTime = dayjs(date).tz('America/Denver').set('hour', 10).set('minute', 0); // 10:00 start time
     const endTime = dayjs(date).tz('America/Denver').set('hour', 18).set('minute', 15); // 6:15 end time
 
+    // Calculate the latest possible start time based on duration + cleanup
+    const latestStartTime = endTime.subtract(duration + cleanup, 'minute');
+
     let time = startTime;
-    while (time.isBefore(endTime)) {
+    while (time.isBefore(latestStartTime) || time.isSame(latestStartTime)) {
         slots.push({
             time: time.toDate(),
             booked: false,

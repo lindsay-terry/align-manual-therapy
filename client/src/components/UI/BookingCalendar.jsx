@@ -15,7 +15,7 @@ import { CREATE_APPOINTMENT } from '../../utils/mutations';
 import Auth from '../../utils/auth';
 
 export default function BookingCalendar({ selectedValue }) {
-
+    // console.log('Selected Value:', JSON.stringify(selectedValue, null, 2));
     const styles={
         container: {
             padding: '30px',
@@ -75,8 +75,11 @@ export default function BookingCalendar({ selectedValue }) {
     const handleSelect = async (value, event) => {
         // Format the day selected to just the day
         const selectedDate = dayjs(value).format('YYYY-MM-DD');
+        // Fetch appointment duration and cleanup from the selected service
+        const selectedDuration = selectedValue.duration  // Default to 0 if undefined
+        const selectedCleanup = selectedValue.cleanup    // Default to 0 if undefined
         // Generate time slots for the day
-        const slots = generateTimeSlots(value);
+        const slots = generateTimeSlots(value, selectedDuration, selectedCleanup);
         // Temporary array to store the day's appointments
         let daysAppointments = [];
         // Check through all appointments to find appointments for selected day
@@ -111,15 +114,25 @@ export default function BookingCalendar({ selectedValue }) {
             // formatted for console.logs and messages
             const formattedSlotTime = slotStartTime.format('hh:mm A');
 
+            // Calculate the potential appointment's end time using the selectedDuration, I think I need to use this somehow
+            const appointmentPotentialEnd = slotStartTime.add(selectedDuration, 'minutes');
+            
             const isBooked = bookedSlots.some(appointment => {
                 const appointmentStartTime = appointment.start;
                 const appointmentEndTime = appointment.end;
-
                 // Get the date from the slotStartTime
                 const slotDate = slotStartTime.format('YYYY-MM-DD');
                 const dayjsAppointmentStart = dayjs(`${slotDate} ${appointmentStartTime}`, 'YYYY-MM-DD hh:mm A');
                 const dayjsAppointmentEnd = dayjs(`${slotDate} ${appointmentEndTime}`, 'YYYY-MM-DD hh:mm A');
-
+                console.log('----- ',formattedSlotTime)
+                console.log(slotStartTime.format('hh:mm A'), " === ", (appointmentStartTime), ' = ', (slotStartTime.format('hh:mm A') === (appointmentStartTime)))
+                console.log(' ')
+                console.log(`${slotStartTime.format('HH:mm')} >  ${(dayjsAppointmentStart.format('HH:mm'))} && ${slotStartTime.format('HH:mm')} < ${dayjsAppointmentEnd.format('HH:mm')}`, ' = ', (slotStartTime.format('HH:mm') > (dayjsAppointmentStart.format('HH:mm')) && slotStartTime.format('HH:mm') < dayjsAppointmentEnd.format('HH:mm')))
+                console.log(' ')
+                console.log(`${slotEndTime.format('HH:mm')} >  ${(dayjsAppointmentStart.format('HH:mm'))} && ${slotEndTime.format('HH:mm')} < ${dayjsAppointmentEnd.format('HH:mm')}`, ' = ', (slotEndTime.format('HH:mm') > dayjsAppointmentStart.format('HH:mm') && slotEndTime.format('HH:mm') < dayjsAppointmentEnd.format('HH:mm')))
+                console.log(' ')
+                console.log(`${slotStartTime.format('HH:mm')} <  ${(dayjsAppointmentStart.format('HH:mm'))} && ${slotEndTime.format('HH:mm')} > ${dayjsAppointmentEnd.format('HH:mm')}`, ' = ', (slotStartTime.format('HH:mm') < dayjsAppointmentStart.format('HH:mm') && slotEndTime.format('HH:mm') > dayjsAppointmentEnd.format('HH:mm')))
+                console.log(' ')
                 return (
                     // Check appointment times against slot times and figure out overlap to consider a slot booked
                     (slotStartTime.format('hh:mm A') === (appointmentStartTime)) ||
@@ -132,6 +145,8 @@ export default function BookingCalendar({ selectedValue }) {
 
             slot.booked = isBooked;
             console.log(`Slot Time: ${formattedSlotTime}, Is Booked: ${isBooked}`);
+            console.log(' ')
+            console.log(' ')
 
         })
 
@@ -220,7 +235,7 @@ export default function BookingCalendar({ selectedValue }) {
                 // onOk={handleConfirm}
                 onCancel={handleCancel}
                 footer={[
-                    <div style={styles.modalFooter}>
+                    <div style={styles.modalFooter} key="modal-footer">
                         <Button style={styles.cancelBtn} key='cancel' onClick={handleCancel}>Cancel</Button>
                         <Button style={styles.confirmBtn} key='ok' onClick={handleConfirm}>Confirm</Button>
                     </div>

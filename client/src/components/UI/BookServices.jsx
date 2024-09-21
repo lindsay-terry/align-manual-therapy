@@ -47,7 +47,7 @@ export default function BookServices() {
     }
 
     // Query all services
-    const { loading, data } = useQuery(QUERY_SERVICES);
+    const { loading, data } = useQuery(QUERY_SERVICES); // I should have all the information here but by the time it gets to selectedValue I have less
     const services = data ? data.services : [];
     // State to manage value selected from radio input form
     const [selectedValue, setSelectedValue] = useState(null);
@@ -74,6 +74,7 @@ export default function BookServices() {
                 id: selectedService._id,
                 name: selectedService.name,
                 duration: option.duration,
+                cleanup: selectedService.cleanup,
                 price: option.price,
             };
             setSelectedValue(serviceData);
