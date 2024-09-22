@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Button, Modal, message } from 'antd';
 import SquarePaymentForm from './UI/SquarePaymentForm';
 
-export default function Payment() {
+export default function Payment({ amount }) {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     const handleOpenModal = () => {
@@ -22,6 +22,9 @@ export default function Payment() {
         handleCloseModal();
     };
 
+    // Format the amount to display in dollars
+    const formattedAmount = (amount / 100).toFixed(2); 
+
     return (
         <div>
         <Button type="primary" onClick={handleOpenModal}>Proceed to Payment</Button>
@@ -32,7 +35,8 @@ export default function Payment() {
             onCancel={() => handleCloseModal(false)} 
             destroyOnClose={true}
         >
-            <SquarePaymentForm amount={1000} onPaymentSuccess={handlePaymentSuccess} />
+            <p>Amount: ${formattedAmount}</p> {/* Display the formatted amount */}
+            <SquarePaymentForm amount={amount} onPaymentSuccess={handlePaymentSuccess} />
         </Modal>
         </div>
     );

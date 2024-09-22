@@ -1,5 +1,5 @@
 import Payment from '../../components/Payment.jsx';
-import CalendarSetup from '../../components/CalendarSetup';
+import AdminCalendarSetup from '../../components/AdminCalendarSetup';
 
 export default function AdminCalendar() {
 
@@ -22,11 +22,10 @@ export default function AdminCalendar() {
             <div style={styles.container}>
                 <div >
                     <h2 style={styles.customHeading}>Admin Calendar</h2>
-                    <Payment />
                 </div>
             </div>
             <div>
-                <CalendarSetup />
+                <AdminCalendarSetup />
             </div>
         </div>
     )
