@@ -75,4 +75,39 @@ export const UPDATE_SERVICE = gql`
             cleanup
         }
     }
-`
+`;
+
+export const ADD_NOTE_TO_USER = gql`
+    mutation addNoteToUser($userId: ID!, $note: String!) {
+        addNoteToUser(userId: $userId, note: $note) {
+            _id
+            notes    
+        }
+    }
+`;
+
+export const DELETE_NOTE = gql`
+    mutation deleteNote($userId: ID!, $note: String!) {
+        deleteNote(userId: $userId, note: $note) {
+            _id
+            notes
+        }
+    }
+`;
+
+export const UPDATE_USER_ROLE = gql`
+    mutation updateUserRole($userId: ID!, $role: Int!) {
+        updateUserRole(userId: $userId, role: $role) {
+            _id
+            role
+        }
+    }
+`;
+
+export const DELETE_USER = gql`
+    mutation deleteUser($userId: ID!) {
+        deleteUser(userId: $userId) {
+            _id
+        }
+    }
+`;
