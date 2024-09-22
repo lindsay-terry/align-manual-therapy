@@ -2,7 +2,7 @@ import { Button, Modal } from "antd";
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import { useNavigate } from 'react-router-dom';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 // Dayjs to manage time
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
@@ -15,7 +15,6 @@ import { CREATE_APPOINTMENT } from '../../utils/mutations';
 import Auth from '../../utils/auth';
 
 export default function BookingCalendar({ selectedValue }) {
-    // console.log('Selected Value:', JSON.stringify(selectedValue, null, 2));
     const styles={
         container: {
             padding: '30px',
@@ -57,8 +56,10 @@ export default function BookingCalendar({ selectedValue }) {
     dayjs.extend(utc);
     dayjs.extend(timezone);
     dayjs.extend(customParseFormat);
-    // Querying existing appointments
-    const { loading, data, refetch } = useQuery(QUERY_APPOINTMENTS);
+    // Querying existing appointments - Always fetch from network not cached value
+    const { loading, data, refetch } = useQuery(QUERY_APPOINTMENTS, {
+        fetchPolicy: "network-only"
+    });
     const appointments = data ? data.appointments : [];
 
     const [createAppointment] = useMutation(CREATE_APPOINTMENT);
@@ -68,50 +69,31 @@ export default function BookingCalendar({ selectedValue }) {
     const [availableSlots, setAvailableSlots] = useState([]);
     const [selectedSlot, setSelectedSlot] = useState(null);
     const [showModal, setShowModal] = useState(false);
-
-    useEffect(() => {
-        const fetchAppointments = async () => {
-            await refetch();
-        };
-
-        fetchAppointments();
-    }, []);
-
     const navigate = useNavigate();
 
     const handleSelect = async (value, event) => {
         // Format the day selected to just the day
         const selectedDate = dayjs(value).format('YYYY-MM-DD');
-        // Fetch appointment duration and cleanup from the selected service
-        const selectedDuration = selectedValue.duration
-        const selectedCleanup = selectedValue.cleanup
+        // Calculating selectedValue total time block
+        const selectedValueTimeBlock = (selectedValue.duration + selectedValue.cleanup)
         // Generate time slots for the day
-        const slots = generateTimeSlots(value, selectedDuration, selectedCleanup);
-        // Temporary array to store the day's appointments
-        let daysAppointments = [];
-        // Check through all appointments to find appointments for selected day
-        for (let i = 0; i < appointments.length; i++) {
-            // Check the day in all the appointments and add them to our daily array
-            if (dayjs(appointments[i].date).format('YYYY-MM-DD') === selectedDate) {
-                daysAppointments.push(appointments[i]);
-            }
-        };
+        const slots = generateTimeSlots(value, selectedValueTimeBlock);
+        // Filter appointments for the selected day
+        const daysAppointments = appointments.filter(appointment =>
+            dayjs(appointment.date).format('YYYY-MM-DD') === selectedDate
+        );
 
-        let bookedSlots = [];
-
-        daysAppointments.forEach(appointment => {
-            // Aquire start and end times for each appointment
+        // Map over the day's appointments to calculate and store the booked time slots (start and end times) for each appointment
+        const bookedSlots = daysAppointments.map(appointment => {
             const startTime = appointment.time;
-            // Calculate end time of appointment based on duration and cleanup time
             const endTime = appointmentDuration(startTime, appointment.duration, appointment.service.cleanup);
-            // Add to array of booked timeslots
-            bookedSlots.push({ start: startTime, end: endTime });
-
+        
+            return { start: startTime, end: endTime };
         });
 
         slots.forEach(slot => {
             const slotStartTime = dayjs(slot.time);  // Start time of the current slot
-            const slotEndTime = slotStartTime.add(45, 'minutes');  // Slot end time (45-minute intervals)
+            const slotEndTime = slotStartTime.add(slot.interval, 'minutes');  // Slot end time (based on chosen interval)
 
             if (!slotStartTime.isValid()) {
                 console.error('Invalid start time:', slot.time);
@@ -121,35 +103,35 @@ export default function BookingCalendar({ selectedValue }) {
             // formatted for console.logs and messages
             const formattedSlotTime = slotStartTime.format('hh:mm A');
         
-            // Calculate the potential appointment's end time using selected duration and cleanup
-            const newAppointmentEndTime = slotStartTime.add(selectedDuration + selectedCleanup, 'minutes');
-            console.log(`Selected Time Block: ${formattedSlotTime} to ${newAppointmentEndTime.format('hh:mm A')}`);
+            // Calculate the potential appointment's end time using selected duration and cleanup as total time block
+            const newAppointmentEnd = slotStartTime.add(selectedValueTimeBlock, 'minutes');
+            console.log(`New Appointment Time Block: ${formattedSlotTime} to ${newAppointmentEnd.format('hh:mm A')}`);
         
-            // Check if this slot overlaps with any existing booked appointments
+            // Check if this time slot overlaps with any existing booked appointments
             const isBooked = bookedSlots.some(appointment => {
                 const appointmentStartTime = dayjs(appointment.start, 'hh:mm A');
                 const appointmentEndTime = dayjs(appointment.end, 'hh:mm A');
         
                 // Ensure we are comparing slots and appointments on the same date
                 const slotDate = slotStartTime.format('YYYY-MM-DD');
-                const appointmentStartOnSameDay = dayjs(`${slotDate} ${appointmentStartTime.format('hh:mm A')}`, 'YYYY-MM-DD hh:mm A');
-                const appointmentEndOnSameDay = dayjs(`${slotDate} ${appointmentEndTime.format('hh:mm A')}`, 'YYYY-MM-DD hh:mm A');
+                const existingAppointmentStart = dayjs(`${slotDate} ${appointmentStartTime.format('hh:mm A')}`, 'YYYY-MM-DD hh:mm A');
+                const existingAppointmentEnd = dayjs(`${slotDate} ${appointmentEndTime.format('hh:mm A')}`, 'YYYY-MM-DD hh:mm A');
         
                 // Logging for debugging
                 console.log(`Slot: ${formattedSlotTime} - ${slotEndTime.format('hh:mm A')}`);
-                console.log(`Appointment: ${appointmentStartOnSameDay.format('hh:mm A')} - ${appointmentEndOnSameDay.format('hh:mm A')}`);
+                console.log(`Appointment: ${existingAppointmentStart.format('hh:mm A')} - ${existingAppointmentEnd.format('hh:mm A')}`);
                 console.log('---');
         
                 // Conditions for overlap:
                 return (
                     // Case 1: The slot starts during an existing appointment
-                    (slotStartTime.isBefore(appointmentEndOnSameDay) && slotEndTime.isAfter(appointmentStartOnSameDay)) ||
+                    (slotStartTime.isBefore(existingAppointmentEnd) && slotEndTime.isAfter(existingAppointmentStart)) ||
         
                     // Case 2: The new appointment's end time overlaps with an existing appointment
-                    (newAppointmentEndTime.isAfter(appointmentStartOnSameDay) && slotStartTime.isBefore(appointmentEndOnSameDay)) ||
+                    (newAppointmentEnd.isAfter(existingAppointmentStart) && slotStartTime.isBefore(existingAppointmentEnd)) ||
         
                     // Case 3: The new appointment fully encompasses an existing appointment
-                    (slotStartTime.isBefore(appointmentStartOnSameDay) && newAppointmentEndTime.isAfter(appointmentEndOnSameDay))
+                    (slotStartTime.isBefore(existingAppointmentStart) && newAppointmentEnd.isAfter(existingAppointmentEnd))
                 );
             });
         
@@ -173,9 +155,7 @@ export default function BookingCalendar({ selectedValue }) {
     const handleConfirm = async () => {
         // Get access to logged in user for ID to book appointment
         const user = Auth.getProfile();
-
         const formattedTime = selectedSlot ? selectedSlot.time : null; 
-        
         const parsedDate = dayjs(day).toISOString();
     
         const variables = {
@@ -187,6 +167,7 @@ export default function BookingCalendar({ selectedValue }) {
             duration: selectedValue.duration,
             
         };
+
         if (!selectedValue || !user.data._id || !day || !formattedTime) {
             console.error('Invalid input data', {
                 selectedValue,
@@ -199,7 +180,7 @@ export default function BookingCalendar({ selectedValue }) {
 
         try {
             await createAppointment({ variables });
-
+            await refetch(); // Refetch right after mutation
             // Redirect to user's page
             navigate('/profile');
         } catch (error) {
