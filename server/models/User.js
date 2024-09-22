@@ -48,6 +48,7 @@ const userSchema = new Schema({
         required: [true, 'Please enter date of birth'],
     },
     appointments: [{ type: Schema.Types.ObjectId, ref: 'Appointment' }],
+    notes: [{ type: String }],
 });
 
 

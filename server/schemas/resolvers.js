@@ -187,6 +187,57 @@ const resolvers = {
                 throw new Error(error.message);
             }
         },
+        addNoteToUser: async (parent, { userId, note }) => {
+            try {
+                const updatedUser = await User.findByIdAndUpdate(
+                    userId,
+                    {$push: { notes: note }},
+                    { new: true }
+                );
+                return updatedUser;
+            } catch (error) {
+                console.error('Error adding note:', error);
+                throw new Error(error.message);
+            }
+        },
+        deleteNote: async (parent, { userId, note }) => {
+            try {
+                const updatedUser = await User.findByIdAndUpdate(
+                    userId,
+                    {$pull: { notes: note }},
+                    { new: true }
+                );
+                return updatedUser;
+            } catch (error) {
+                console.error('Error deleting note:', error);
+                throw new Error(error.message);
+            }
+        },
+        updateUserRole: async (parent, { userId, role }) => {
+            try {
+                const updatedUser = await User.findByIdAndUpdate(
+                    userId,
+                    { role },
+                    { new: true }
+                );
+                return updatedUser;
+            } catch (error) {
+                console.error('Error updating user role', error);
+                throw new Error(error.message);
+            }
+        },
+        deleteUser: async (parent, { userId }) => {
+            try {
+                const deletedUser = await User.findOneAndDelete({ _id: userId });
+                if (!deletedUser) {
+                    throw new Error('User not found');
+                }
+                return deletedUser;
+            } catch (error) {
+                console.error('Error deleting user', error);
+                throw new Error(error.message);
+            }
+        },
     },
 };
 

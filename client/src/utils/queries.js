@@ -25,6 +25,21 @@ export const QUERY_USER = gql`
     }  
 `;
 
+export const QUERY_USERS = gql`
+    query users {
+        users {
+            _id
+            firstName
+            lastName
+            email
+            phone
+            birthdate
+            role
+            notes    
+        }
+    }
+`
+
 export const QUERY_SERVICES = gql`
     query getServices {
         services {

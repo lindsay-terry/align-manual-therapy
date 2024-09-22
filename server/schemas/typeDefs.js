@@ -8,6 +8,7 @@ const typeDefs =`
         phone: String!
         birthdate: String!
         appointments: [Appointment]
+        notes: [String]
     }
 
     type Option {
@@ -79,6 +80,10 @@ const typeDefs =`
         createAppointment(service: ID!, user: ID!, date: String!, time: String!, duration: Int!, price: Float!): Appointment
         updateService(id: ID!, input: UpdateServiceInput!): Service
         submitContact(name: String!, email: String!, message: String!): String
+        addNoteToUser(userId: ID!, note: String!): User
+        deleteNote(userId: ID!, note: String!): User
+        updateUserRole(userId: ID!, role: Int!): User
+        deleteUser(userId: ID!): User
     }
 `;
 
