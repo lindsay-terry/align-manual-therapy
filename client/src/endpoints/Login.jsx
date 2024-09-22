@@ -9,7 +9,7 @@ export default function Login() {
     const styles = {
         background: {
             backgroundColor: 'var(--isabelline)',
-            height: '90vh', // viewport height
+            height: '70vh', // viewport height
             
         },
         container: {
