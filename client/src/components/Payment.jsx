@@ -4,7 +4,7 @@ import { useMutation } from '@apollo/client';
 import { MARK_AS_PAID } from '../utils/mutations';
 import SquarePaymentForm from './UI/SquarePaymentForm';
 
-export default function Payment({ amount, appointmentId }) {
+export default function Payment({ amount, appointmentId, onPaymentSuccess }) {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     // Mark appointment associated with payment as paid
@@ -32,6 +32,8 @@ export default function Payment({ amount, appointmentId }) {
         if (success) { 
             message.success('Payment was successful!');
             handleUpdateAppointment();
+            onPaymentSuccess();
+            
         } else {
             message.error('Payment failed.');
         }
