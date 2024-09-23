@@ -11,38 +11,19 @@ import Payment from './Payment.jsx';
 const localizer = dayjsLocalizer(dayjs);
 
 export default function AdminCalendarSetup() {
+
     const [view, setView] = useState(Views.WEEK);
     const [modalOpen, setModalOpen] = useState(false);
-    const [showPayment, setShowPayment] = useState(false);
     const [selectedAppointment, setSelectedAppointment] = useState(null);
-
-    // Define working hours example (10:00 AM to 6:15 PM)
-    const workStartTime = new Date();
-    workStartTime.setHours(10, 0, 0);
-    const workEndTime = new Date();
-    workEndTime.setHours(18, 15, 0);
+    const [isPaid, setIsPaid] = useState(false); // Track payment statu
 
     // Fetch appointments from GraphQL - Always fetch from network not cached value
-    const { loading, error, data } = useQuery(QUERY_APPOINTMENTS, {
+    const { loading, error, data, refetch} = useQuery(QUERY_APPOINTMENTS, {
         fetchPolicy: "network-only"
     }); 
 
     if (loading) return <p>Loading...</p>;
     if (error) return <p>Error fetching appointments.</p>;
-
-    // useEffect(() => {
-    //     if (data?.appointments) {
-    //         const updatedShowPayment = {};
-    //         data.appointments.forEach(appointment => {
-    //             if (appointment.isPaid) {
-    //                 updatedShowPayment[appointment._id] = false;
-    //             } else {
-    //                 updatedShowPayment[appointment_id] = showPayment[appointment._id] || false
-    //             }
-    //         });
-    //         setShowPayment(updatedShowPayment)
-    //     }
-    // }, [data?.appointments])
 
     // Helper function to parse "HH:MM AM/PM" format
     const parseTime = (date, time) => {
@@ -89,19 +70,25 @@ export default function AdminCalendarSetup() {
 
     const handleSelectEvent = (event) => {
         setSelectedAppointment(event.appointment); // Store the selected appointment
+        setIsPaid(event.appointment.isPaid); // Set payment status based on the selected appointment
         setModalOpen(true); // Open the modal
     };
 
     const handleCloseModal = () => {
         setModalOpen(false); // Close the modal
         setSelectedAppointment(null); // Clear selected appointment
+        setIsPaid(false); // Reset the payment status when modal is closed
+    };
+
+    const handlePaymentSuccess = () => {
+        setIsPaid(true); // Mark the appointment as paid on success
     };
 
     return (
         <div>
         <Calendar
-            min={workStartTime} // Set start time to 10:00 AM
-            max={workEndTime} // Set end time to 6:15 PM
+            min={new Date().setHours(10, 0)} // Set start time to 10:00 AM
+            max={new Date().setHours(18, 15)} // Set end time to 6:15 PM
             localizer={localizer}
             events={events} // Pass the transformed events
             startAccessor="start"
@@ -119,34 +106,9 @@ export default function AdminCalendarSetup() {
             open={modalOpen}
             onCancel={handleCloseModal}
             footer={[
-                <Button.Group key="buttons" style={{ display: 'flex', justifyContent: 'flex-end', gap:'10px'}}>
-                    {/* {selectedAppointment && <Payment amount={selectedAppointment.price * 100} />} */}
-                    <div style={{display: 'flex', flexDirection: 'column'}}>
-                        <div>
-                            <Button 
-                                key="pay" 
-                                onClick={() => { setShowPayment(true)}} 
-                                disabled={selectedAppointment?.isPaid} // Disable if isPaid is true
-                            >
-                                {selectedAppointment?.isPaid ? 'Paid!' : 'Process Payment'}
-                            </Button>
-                            <Button key="close" onClick={handleCloseModal}>
-                                Close
-                            </Button>
-                        </div>
-                        <div style={{padding: '10px'}}>
-                        {showPayment && selectedAppointment && (
-                            <Payment 
-                                amount={selectedAppointment.price * 100} 
-                                appointmentId={selectedAppointment._id} 
-                            />
-                        )}
-                        </div>
-                    </div>
-                </Button.Group>
-
-            
-
+                <Button key="close" onClick={handleCloseModal}>
+                    Close
+                </Button>
             ]}
         >
             {selectedAppointment && (
@@ -158,6 +120,16 @@ export default function AdminCalendarSetup() {
                     <p><strong>Time:</strong> {formatTime(selectedAppointment.start)}</p>
                     <p><strong>Client:</strong> {selectedAppointment.user.firstName} {selectedAppointment.user.lastName}</p>
                     <p><strong>Price:</strong> ${selectedAppointment.price.toFixed(2)}</p>
+                    {/* Show "Service has been paid" if paid, otherwise show Payment component */}
+                    {isPaid ? (
+                        <p>Service has been paid!</p>
+                    ) : (
+                        <Payment
+                            amount={selectedAppointment.price * 100} // Send price in cents
+                            appointmentId={selectedAppointment._id}
+                            onPaymentSuccess={handlePaymentSuccess} // Handle payment success
+                        />
+                    )}
                 </div>
             )}
         </Modal>

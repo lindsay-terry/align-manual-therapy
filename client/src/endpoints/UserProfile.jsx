@@ -43,20 +43,12 @@ export default function UserProfile() {
     useEffect(() => {
         refetch(); 
     }, [refetch]);
-
-    useEffect(() => {
-        if (result?.appointments) {
-            const updatedShowPayment = {};
-            result.appointments.forEach(appointment => {
-                if (appointment.isPaid) {
-                    updatedShowPayment[appointment._id] = false;
-                } else {
-                    updatedShowPayment[appointment._id] = showPayment[appointment._id] || false;
-                }
-            });
-            setShowPayment(updatedShowPayment);
-        }
-    }, [result?.appointments]); // Run whenever appointments change
+    
+    // Update status of showPayment to false when user has paid so blue button disappearas
+    const handlePaymentSuccess = (appointmentId) => {
+        setShowPayment((prev) => ({ ...prev, [appointmentId]: false}));
+        refetch();
+    }
 
     if (loading || loadingAppointments) return <p>Loading...</p>;
 
@@ -170,7 +162,7 @@ export default function UserProfile() {
                                         )}
 
                                     {showPayment[appointment._id] && (
-                                        <Payment amount={appointment.price*100} appointmentId={appointment._id}/>
+                                        <Payment amount={appointment.price*100} appointmentId={appointment._id} onPaymentSuccess={() => handlePaymentSuccess(appointment._id)}/>
                                     )}
 
                                     </div>
