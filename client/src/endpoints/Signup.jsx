@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Form, Input, Button, Row, Col } from 'antd';
+import { Form, Input, Button, Row, Col, notification } from 'antd';
 import DatePicker from "react-datepicker";
 import { registerLocale } from 'react-datepicker';
 import { enUS } from 'date-fns/locale';
@@ -56,6 +56,16 @@ export default function Signup() {
     const [birthdate, setBirthdate] = useState(null);
     const [createUser, { error }] = useMutation(CREATE_USER);
 
+
+    // Function to open notification
+    const openNotification = (message, description) => {
+      notification.error({
+        message,
+        description,
+        placement: 'topRight', 
+      });
+    };
+
     const handleChange = (event) => {
         const { name, value } = event.target;
         setFormState((prev) => ({ ...prev, [name]: value }))
@@ -110,6 +120,12 @@ export default function Signup() {
         }));
       form.setFieldsValue({ phone: formattedPhone }); // Update the Form field
     };
+
+     // Handles form submission failure
+    const handleFormSubmitFailed = (errorInfo) => {
+      openNotification('Error', 'Error signing up, please try again.'); // Show notification when validation fails
+    };
+
       
     return (
       <div style={styles.background}>
@@ -117,11 +133,13 @@ export default function Signup() {
           <h2 style={styles.customHeading}>Get Started Today!</h2>
           <h3 style={styles.customHeading}> Make an account</h3>
           <div style={styles.formWrapper}>
+        
           <Form
             name="signup"
             form={form}
             layout="vertical"
             onFinish={handleFormSubmit}
+            onFinishFailed={handleFormSubmitFailed} // This handles failed validation
           >
             <Row gutter={16}>
               <Col span={12}>

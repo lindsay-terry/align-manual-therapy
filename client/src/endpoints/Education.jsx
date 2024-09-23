@@ -1,14 +1,13 @@
 import { Row, Col } from 'antd';
 import Ryan from '../assets/images/Ryan.webp';
 import mblex from '../assets/images/mblex_logo.webp';
-import UTOMT from '../assets/images/utah_college_of_massage_therapy_logo_edited.webp';
+import UCOMT from '../assets/images/utah_college_of_massage_therapy_logo_edited.webp';
 
 export default function Education() {
 
     const styles = {
         background: {
             backgroundColor: 'var(--isabelline)',
-            height: '90vh', // viewport height
             
         },
         container: {
@@ -51,7 +50,7 @@ export default function Education() {
                         <div>
                             <img src={Ryan} alt="Ryan O" style={styles.image} />
                             <img src={mblex} alt="MBLEX Logo" style={styles.logoImage} />
-                            <img src={UTOMT} alt="Utah College of Massage Therapy Logo" style={styles.logoImage} />
+                            <img src={UCOMT} alt="Utah College of Massage Therapy Logo" style={styles.logoImage} />
                         </div>
                     </Col>
                     <Col xs={24} md={12}>
