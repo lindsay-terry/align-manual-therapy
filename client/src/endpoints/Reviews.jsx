@@ -2,6 +2,8 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Modal, Typography, Layout } from 'antd';
 
+import Sunset from '../assets/images/sunset.jpg';
+
 // Destructure components from Ant Design
 const { Title } = Typography;
 const { Content } = Layout;
@@ -45,12 +47,25 @@ const Reviews = () => {
 
     // Render the Reviews component
     return (
-        <Layout style={{ padding: '20px' }}>
+        <Layout style={{ padding: '20px', backgroundImage: `url(${Sunset})`, 
+            backgroundSize: 'cover', 
+            backgroundPosition: 'center', 
+            backgroundRepeat: 'no-repeat', 
+            minHeight: '100vh', 
+             }}>
             <Content className="reviews-container" style={{ textAlign: 'center' }}>
-                <Title level={2}>What Our Clients Are Saying</Title>
+                <Title level={1} style={{ fontFamily: 'Quicksand',}}>What Our Clients Are Saying</Title>
                 
                 {/* Button to open the modal */}
-                <Button type="primary" onClick={handleOpenModal}>
+                <Button 
+                type="primary" 
+                onClick={handleOpenModal} 
+                style={{ 
+                    marginTop: '150px', 
+                    padding: '20px 30px', // Adjust padding for larger size
+                    fontSize: '20px', 
+                }}
+                >
                     Google Reviews
                 </Button>
 
