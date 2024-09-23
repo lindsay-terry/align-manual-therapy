@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Form, Input, Button, Alert } from 'antd';
+import { Form, Input, Button, Alert, notification } from 'antd';
 import { useMutation } from '@apollo/client';
 import { LOGIN } from '../utils/mutations';
 import Auth from '../utils/auth';
@@ -37,6 +37,16 @@ export default function Login() {
 
     const [formState, setFormState] = useState({ email: '', password: '' });
     const [login, { error, data }] = useMutation(LOGIN);
+
+    // Function to open error notification
+    const openNotification = (message, description) => {
+        notification.error({
+          message,
+          description,
+          placement: 'topRight', 
+        });
+    };
+
     // update state based on form input changes
     const handleChange = (event) => {
     const { name, value } = event.target;
@@ -48,15 +58,23 @@ export default function Login() {
     // submit form
     const handleFormSubmit = async (event) => {
         event.preventDefault();
-        console.log(formState);
+        
+
+        // Check for empty fields and show error notification
+        if (!formState.email || !formState.password) {
+            openNotification('Login Failed', 'Please fill in both email and password fields.');
+            return;
+        }
         try {
             const { data } = await login({
                 variables: { ...formState },
             });
             Auth.login(data.login.token);
-            console.log('DATA_LOGIN_TOKEN', data.login.token);
+            
         } catch (e) {
             console.error(e);
+            // Show notification on login failure
+            openNotification('Login Failed', 'Invalid credentials. Please try again.');
         }
         // clear form values
         setFormState({
@@ -70,14 +88,6 @@ export default function Login() {
             <h2 style={styles.customHeading}>Login</h2>
             <div style={styles.formWrapper}>
                 
-                {error && (
-                    <Alert
-                        message="Login Error"
-                        description="There was an error logging in. Please check your credentials and try again."
-                        type="error"
-                        showIcon
-                    />
-                )}
                 <Form
                     name="login"
                     layout="vertical"
