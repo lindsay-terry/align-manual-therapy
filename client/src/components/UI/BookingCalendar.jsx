@@ -94,10 +94,19 @@ export default function BookingCalendar({ selectedValue }) {
         slots.forEach(slot => {
             const slotStartTime = dayjs(slot.time);  // Start time of the current slot
             const slotEndTime = slotStartTime.add(slot.interval, 'minutes');  // Slot end time (based on chosen interval)
+            const currentTime = dayjs();  // Current time
+            const minTimeAhead = 30;  // Minimum time in minutes before current time
 
             if (!slotStartTime.isValid()) {
                 console.error('Invalid start time:', slot.time);
                 return;
+            }
+
+            // Check if the slot starts less than 30 minutes from the current time
+            if (slotStartTime.isBefore(currentTime.add(minTimeAhead, 'minutes'))) {
+                console.log(`Slot ${slotStartTime.format('hh:mm A')} is too soon to book.`);
+                slot.booked = true;  // Mark the slot as booked/unavailable
+                return;  // Skip further processing for this slot
             }
             
             // formatted for console.logs and messages
