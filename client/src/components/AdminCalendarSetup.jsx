@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Calendar, Views, dayjsLocalizer } from 'react-big-calendar';
 import { useQuery } from '@apollo/client';
 import dayjs from 'dayjs';
@@ -13,6 +13,7 @@ const localizer = dayjsLocalizer(dayjs);
 export default function AdminCalendarSetup() {
     const [view, setView] = useState(Views.WEEK);
     const [modalOpen, setModalOpen] = useState(false);
+    const [showPayment, setShowPayment] = useState(false);
     const [selectedAppointment, setSelectedAppointment] = useState(null);
 
     // Define working hours example (10:00 AM to 6:15 PM)
@@ -28,6 +29,20 @@ export default function AdminCalendarSetup() {
 
     if (loading) return <p>Loading...</p>;
     if (error) return <p>Error fetching appointments.</p>;
+
+    // useEffect(() => {
+    //     if (data?.appointments) {
+    //         const updatedShowPayment = {};
+    //         data.appointments.forEach(appointment => {
+    //             if (appointment.isPaid) {
+    //                 updatedShowPayment[appointment._id] = false;
+    //             } else {
+    //                 updatedShowPayment[appointment_id] = showPayment[appointment._id] || false
+    //             }
+    //         });
+    //         setShowPayment(updatedShowPayment)
+    //     }
+    // }, [data?.appointments])
 
     // Helper function to parse "HH:MM AM/PM" format
     const parseTime = (date, time) => {
@@ -105,14 +120,37 @@ export default function AdminCalendarSetup() {
             onCancel={handleCloseModal}
             footer={[
                 <Button.Group key="buttons" style={{ display: 'flex', justifyContent: 'flex-end', gap:'10px'}}>
-                    {selectedAppointment && <Payment amount={selectedAppointment.price * 100} />}
-                    <Button key="close" onClick={handleCloseModal}>
-                        Close
-                    </Button>
+                    {/* {selectedAppointment && <Payment amount={selectedAppointment.price * 100} />} */}
+                    <div style={{display: 'flex', flexDirection: 'column'}}>
+                        <div>
+                            <Button 
+                                key="pay" 
+                                onClick={() => { setShowPayment(true)}} 
+                                disabled={selectedAppointment?.isPaid} // Disable if isPaid is true
+                            >
+                                {selectedAppointment?.isPaid ? 'Paid!' : 'Process Payment'}
+                            </Button>
+                            <Button key="close" onClick={handleCloseModal}>
+                                Close
+                            </Button>
+                        </div>
+                        <div style={{padding: '10px'}}>
+                        {showPayment && selectedAppointment && (
+                            <Payment 
+                                amount={selectedAppointment.price * 100} 
+                                appointmentId={selectedAppointment._id} 
+                            />
+                        )}
+                        </div>
+                    </div>
                 </Button.Group>
+
+            
+
             ]}
         >
             {selectedAppointment && (
+                
                 <div>
                     <p><strong>Service:</strong> {selectedAppointment.service.name}</p>
                     <p><strong>Duration:</strong> {selectedAppointment.duration} minutes</p>

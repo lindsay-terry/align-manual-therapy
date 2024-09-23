@@ -1,9 +1,14 @@
 import React, { useState } from 'react';
 import { Button, Modal, message } from 'antd';
+import { useMutation } from '@apollo/client';
+import { MARK_AS_PAID } from '../utils/mutations';
 import SquarePaymentForm from './UI/SquarePaymentForm';
 
-export default function Payment({ amount }) {
+export default function Payment({ amount, appointmentId }) {
     const [isModalOpen, setIsModalOpen] = useState(false);
+
+    // Mark appointment associated with payment as paid
+    const [markPaid, { loading, error }] = useMutation(MARK_AS_PAID);
 
     const handleOpenModal = () => {
         setIsModalOpen(true);
@@ -13,9 +18,20 @@ export default function Payment({ amount }) {
         setIsModalOpen(false);
     };
 
+    const handleUpdateAppointment = async () => {
+        try {
+            const result = await markPaid({
+                variables: { appointmentId },
+            });
+        } catch (error) {
+            console.error('Error updating appointment', error);
+        }
+    };
+
     const handlePaymentSuccess = (success) => {
         if (success) { 
             message.success('Payment was successful!');
+            handleUpdateAppointment();
         } else {
             message.error('Payment failed.');
         }

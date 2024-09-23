@@ -1,10 +1,11 @@
-import { Descriptions, Row, Col, Card } from 'antd';
+import { Descriptions, Row, Col, Card, Button } from 'antd';
 import { useQuery } from '@apollo/client';
 import { QUERY_ME, QUERY_APPOINTMENTS } from '../utils/queries';
 import alignlogo from '../assets/images/alignlogo.webp';
 import dayjs from 'dayjs';
 import Auth from '../utils/auth';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import Payment from '../components/Payment';
 
 
 export default function UserProfile() {
@@ -22,16 +23,40 @@ export default function UserProfile() {
         customHeader: {
             margin: '0px',
             padding: '20px',
+        },
+        payButton: {
+            padding: '20px',
+            marginTop: '10px'
         }
     }
 
     const { loading, error, data } = useQuery(QUERY_ME);
     const { loading: loadingAppointments, error: appointmentError, data: result, refetch} = useQuery(QUERY_APPOINTMENTS);
 
+    const [showPayment, setShowPayment] = useState(false);
+
+    const handlePay = (appointmentId) => {
+        setShowPayment((prev) => ({ ...prev, [appointmentId]: true }));
+    };
+
     // Refetch user data on component mount to update userData appointments
     useEffect(() => {
         refetch(); 
-    }, []);
+    }, [refetch]);
+
+    useEffect(() => {
+        if (result?.appointments) {
+            const updatedShowPayment = {};
+            result.appointments.forEach(appointment => {
+                if (appointment.isPaid) {
+                    updatedShowPayment[appointment._id] = false;
+                } else {
+                    updatedShowPayment[appointment._id] = showPayment[appointment._id] || false;
+                }
+            });
+            setShowPayment(updatedShowPayment);
+        }
+    }, [result?.appointments]); // Run whenever appointments change
 
     if (loading || loadingAppointments) return <p>Loading...</p>;
 
@@ -104,9 +129,12 @@ export default function UserProfile() {
                 </Col>
                 <Col xs={24} sm={12} style={{ padding: '16px' }}>
                     {sortedAppts.map((appointment, index) => {
-                        const isPast = dayjs(appointment.date).isBefore(dayjs()); // Check if the appointment date is in the past
+                        // Check if the appointment date is in the past
+                        const isPast = dayjs(appointment.date).isBefore(dayjs().startOf('day')); 
+                        // Check if the appointment is today
+                        const isToday = dayjs(appointment.date).isSame(dayjs(), 'day'); 
                         const cardStyle = {
-                            backgroundColor: isPast ? '#083D77' : 'var(--another-green)', // dark blue for past, light green for future
+                            backgroundColor: isPast ? '#083D77' : (isToday ? 'var(--tan)' : 'var(--another-green)'), // dark blue for past, light green for future
                             color: isPast ? 'var(--seasalt)' : '',
                             marginBottom: '16px',
                             boxShadow: '0px 1px 4px var(--olive-2)',
@@ -114,10 +142,14 @@ export default function UserProfile() {
 
                         return (
                             <Card key={index} style={cardStyle}>
-                                {isPast? <h3>Previous Service:</h3> : 
+                                {isPast? (
+                                    <h3>Previous Service:</h3>
+                                ) : isToday? (
+                                    <h2>Appointment Today!</h2>
+                                ) : (
                                 <div style={{display: 'flex', justifyContent: 'space-evenly'}}>
                                     <h2>Upcoming appointment:</h2> 
-                                </div>}
+                                </div>)}
                                 <div style={{display: 'flex', justifyContent: 'space-evenly'}}>
                                     <div>
                                         <div style={{display: 'flex'}}>
@@ -127,6 +159,20 @@ export default function UserProfile() {
                                         <div >
                                             <h3>{appointment.service.name} {appointment.duration} minutes</h3>
                                         </div>
+                                        {!appointment.isPaid ? (
+                                        <Button style={styles.payButton} key={appointment._id} onClick={() => handlePay(appointment._id)}>
+                                            Pay Now
+                                        </Button>
+                                        ) : (
+                                        <Button style={styles.payButton} key={appointment._id} disabled>
+                                            Paid!
+                                        </Button>
+                                        )}
+
+                                    {showPayment[appointment._id] && (
+                                        <Payment amount={appointment.price*100} appointmentId={appointment._id}/>
+                                    )}
+
                                     </div>
                                     <div>
                                         <img style={styles.customImg} src={alignlogo} alt='Align Manual Therapy Logo'></img>

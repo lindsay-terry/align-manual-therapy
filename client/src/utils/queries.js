@@ -93,6 +93,7 @@ export const QUERY_APPOINTMENTS = gql`
             time
             duration
             price
+            isPaid
             user {
                 _id
                 firstName

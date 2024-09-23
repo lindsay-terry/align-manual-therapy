@@ -29,6 +29,10 @@ const appointmentSchema = new Schema({
         type: Number,
         required: true,
     },
+    isPaid: {
+        type: Boolean,
+        default: false,
+    }
 }, { timestamps: true, });
 
 const Appointment = model('Appointment', appointmentSchema);
