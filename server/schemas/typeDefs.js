@@ -29,6 +29,7 @@ const typeDefs =`
         time: String!
         duration: Int!
         price: Float!
+        isPaid: Boolean!
     }
 
     type Service {
@@ -84,6 +85,7 @@ const typeDefs =`
         deleteNote(userId: ID!, note: String!): User
         updateUserRole(userId: ID!, role: Int!): User
         deleteUser(userId: ID!): User
+        markAsPaid(appointmentId: ID!): Appointment
     }
 `;
 

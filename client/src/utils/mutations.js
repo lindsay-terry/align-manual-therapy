@@ -111,3 +111,12 @@ export const DELETE_USER = gql`
         }
     }
 `;
+
+export const MARK_AS_PAID = gql`
+    mutation markAsPaid($appointmentId: ID!) {
+        markAsPaid(appointmentId: $appointmentId) {
+            _id
+            isPaid
+        }
+    }    
+`

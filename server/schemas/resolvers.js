@@ -238,6 +238,19 @@ const resolvers = {
                 throw new Error(error.message);
             }
         },
+        markAsPaid: async (parent, { appointmentId }) => {
+            try {
+                const appointment = await Appointment.findByIdAndUpdate(
+                    appointmentId,
+                    { isPaid: true },
+                    { new: true },
+                );
+                return appointment;
+            } catch (error) {
+                console.error('Error updating appointment', error);
+                throw new Error('Error updating appointment as paid.');
+            }
+        },
     },
 };
 
