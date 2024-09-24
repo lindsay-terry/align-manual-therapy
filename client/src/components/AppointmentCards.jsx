@@ -1,10 +1,10 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Card, Button } from 'antd';
 import alignlogo from '../assets/images/alignlogo.webp';
 import dayjs from 'dayjs';
 import Payment from '../components/Payment';
 
-export default function AppointmentCards({ userData }) {
+export default function AppointmentCards({ userData, refetch }) {
 
     const styles = {
         cardTitle: {
@@ -33,6 +33,11 @@ export default function AppointmentCards({ userData }) {
         setShowPayment((prev) => ({ ...prev, [appointmentId]: false}));
         refetch();
     }
+
+    // Refetch user data on updates
+    useEffect(() => {
+        refetch();
+    }, [userData]);
 
     const myAppts = userData.appointments;
     // Avoid timestamp formats rendering and interferring with date accuracy

@@ -25,6 +25,10 @@ export default function UserProfile() {
         payButton: {
             padding: '20px',
             marginTop: '10px'
+        },
+        editButton: {
+            marginTop: '20px',
+            padding: '20px'
         }
     }
 
@@ -66,13 +70,13 @@ export default function UserProfile() {
                     )}
 
                     {!isEditing && (
-                        <Button type="primary" onClick={toggleEditMode} style={{ marginTop: '20px' }}>
+                        <Button onClick={toggleEditMode} style={styles.editButton}>
                             Edit Profile
                         </Button>
                     )}
                 </Col>
                 <Col xs={24} sm={12}>
-                    <AppointmentCards userData={userData} />
+                    <AppointmentCards userData={userData} refetch={refetch} />
                 </Col>
             </Row>
         </div>
