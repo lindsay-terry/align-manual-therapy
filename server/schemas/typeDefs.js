@@ -53,6 +53,7 @@ const typeDefs =`
         name: String
         email: String
         message: String
+        createdAt: String
     }
 
     type Auth {
