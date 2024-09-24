@@ -2,14 +2,41 @@ import { Link, useLocation } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { Drawer, Button, Menu, Flex } from 'antd';
 import { MenuOutlined } from '@ant-design/icons';
-import Auth from '../../utils/auth';
+import Auth from '../utils/auth';
 
 export default function Nav() {
+    // State for managing responsiveness for menu
+    const [isSmallScreen, setIsSmallScreen] = useState(window.matchMedia('(max-width: 880px)').matches);
+
+    const styles={
+        activeLink: {
+            color: 'var(--olive-2)',
+            padding: '30px',
+            fontWeight: 'bold',
+        },
+        inactiveLink: {
+            textDecoration: 'none',
+            padding: '20px',
+            color: 'var(--black-olive)',
+        },
+        menuButton: {
+            display: isSmallScreen? 'block' : 'none',
+            margin: '10px'
+        },
+        navLinks: {
+            display: isSmallScreen? 'none' : 'block',
+            gap: '20px',
+            margin: '10px'
+        },
+        logoutBtn: {
+            backgroundColor: 'var(--olive-2)',
+            color: 'var(--seasalt)',
+        }
+    }
+
     const location = useLocation();
     // State for opening drawer
     const [open, setOpen] = useState(false);
-    // State for managing responsiveness for menu
-    const [isSmallScreen, setIsSmallScreen] = useState(window.matchMedia('(max-width: 880px)').matches);
 
     // Functions to handle state changes for opening and closing drawer
     const showDrawer = () => {
@@ -36,34 +63,12 @@ export default function Nav() {
         return () => window.removeEventListener('resize', beResponsive);
     }, []);
     
-    const styles={
-        activeLink: {
-            color: 'var(--olive-2)',
-            padding: '30px',
-        },
-        inactiveLink: {
-            textDecoration: 'none',
-            padding: '20px',
-            color: 'var(--black-olive)',
-        },
-        menuButton: {
-            display: isSmallScreen? 'block' : 'none',
-            margin: '10px'
-        },
-        navLinks: {
-            display: isSmallScreen? 'none' : 'block',
-            gap: '20px',
-            margin: '10px'
-        }
-    }
-
     // Nav items array with path and label for what text to show
     const navItems = [
         { path: '/', label: 'Home' },
         { path: '/book-massage', label: 'Book Massage' },
         // If Admin, don't show the following menu items
         ...(Auth.loggedIn() && Auth.isAdmin()) ? '' : [
-            { path: '/gift-certificates', label: 'Gift Certificates' },
             { path: '/reviews', label: 'Reviews' },
             { path: '/education', label: 'Education' },
             { path: '/contact', label: 'Contact' },
@@ -96,7 +101,7 @@ export default function Nav() {
     if (Auth.loggedIn()) {
         menuItems.push({
             key: 'logout',
-            label: <Button onClick={handleLogout} style={styles.inactiveLink}>Logout</Button>
+            label: <Button onClick={handleLogout} style={styles.logoutBtn}>Logout</Button>
         });
     }
 
@@ -117,7 +122,7 @@ export default function Nav() {
                     </Link>
                 ))}
                     {Auth.loggedIn() && (
-                        <Button onClick={handleLogout} style={styles.inactiveLink}>Logout</Button>
+                        <Button onClick={handleLogout} style={styles.logoutBtn}>Logout</Button>
                     )}
             </Flex>
 

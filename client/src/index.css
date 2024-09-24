@@ -1,41 +1,16 @@
 :root {
-    /* using  */
     --isabelline: #F4F0EFff;
-    --alabaster: #F0E9DFff;
     --olive-2: #888328ff;
     --black-olive: #313920ff;
-    --dark-moss-green: #3B4311ff;
     --eerie-black: #19231Bff;
-    --papaya-whip: #FDEDCCff;
-    --asparagus-2: #80AC64ff;
     --black-bean: #491510ff;
-    --another-green: rgb(199, 221, 196);
     --seasalt: #FBFAF8;
-    --tan: #DCBC9Dff;
     /* for cancel buttons  */
     --bittersweet: #df3529;
-
-    /* Not sure if using/not using yet  */
-    --caf-noir: #54390Dff;
-    --night: #0D140Cff;
-    --field-drab: #6D5124ff;
-    --xanthous: #F4B23Cff;
-    --dark-goldenrod: #977E37ff;
-    /* trying to find the right green for header  */
-    --dark-moss-green-2: #55622Cff;
-    --dark-moss-green-3: #606511ff;
-    --olive: #8C8131ff;  
-    --black-bean: #2F1303ff;
-
-    --khaki: #BFA48Bff;
-
-    /* better greens and a pinkish */
-    --asparagus: #6E9569ff;
 }
 
 body {
     font-family: "Quicksand", sans-serif;
     font-weight: 400;
     color: var(--eerie-black);
-    /* background-color: var(--isabelline); */
 }

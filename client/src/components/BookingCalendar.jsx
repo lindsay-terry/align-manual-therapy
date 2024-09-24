@@ -8,11 +8,11 @@ import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
-import { generateTimeSlots, appointmentDuration } from '../../utils/timeslots';
+import { generateTimeSlots, appointmentDuration } from '../utils/timeslots';
 import { useQuery, useMutation } from '@apollo/client';
-import { QUERY_APPOINTMENTS } from '../../utils/queries';
-import { CREATE_APPOINTMENT } from '../../utils/mutations';
-import Auth from '../../utils/auth';
+import { QUERY_APPOINTMENTS } from '../utils/queries';
+import { CREATE_APPOINTMENT } from '../utils/mutations';
+import Auth from '../utils/auth';
 
 export default function BookingCalendar({ selectedValue }) {
     const styles={

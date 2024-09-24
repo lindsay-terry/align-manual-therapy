@@ -1,10 +1,10 @@
 import { Form, Radio, Card, Collapse, Button } from 'antd';
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { QUERY_SERVICES } from '../../utils/queries';
+import { QUERY_SERVICES } from '../utils/queries';
 import { useQuery } from '@apollo/client';
 import BookingCalendar  from './BookingCalendar';
-import Auth from '../../utils/auth';
+import Auth from '../utils/auth';
 
 export default function BookServices() {
     const styles={

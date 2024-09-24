@@ -5,7 +5,6 @@ import Error from './endpoints/Error';
 import Home from './endpoints/Home';
 import Signup from './endpoints/Signup';
 import Book from './endpoints/Book';
-import GiftCertificates from './endpoints/GiftCertificates';
 import Reviews from './endpoints/Reviews';
 import Education from './endpoints/Education';
 import Contact from './endpoints/Contact';
@@ -31,10 +30,6 @@ const router = createBrowserRouter([
             {
                 path: '/book-massage',
                 element: <Book />,
-            },
-            {
-                path: '/gift-certificates',
-                element: <GiftCertificates />,
             },
             {
                 path: '/reviews',

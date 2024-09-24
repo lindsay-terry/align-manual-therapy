@@ -99,13 +99,6 @@ const typeDefs =`
         updateUser(id: ID!, input: UpdateUserInput!): User
     }
 
-    type Query {
-        getContacts: [Contact]
-    }
-
-    type Mutation {
-        submitContact(name: String!, email: String!, message: String!): String
-    }
 `;
 
 module.exports = typeDefs;

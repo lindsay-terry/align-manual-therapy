@@ -1,13 +1,21 @@
-import React from 'react';
 import { useQuery } from '@apollo/client';
 import { GET_CONTACTS } from '../../utils/queries';
-import { Table, Spin, Alert } from 'antd';
+import { Table, Spin, Alert, Result } from 'antd';
+import Auth from '../../utils/auth';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
-
 dayjs.extend(utc);
 
 export default function ViewContacts() {
+  const styles = {
+    container: {
+      padding: '20px',
+      backgroundColor: 'var(--isabelline)',
+    }
+  }
+  // Security check to ensure only admins have access to this endpoint
+  const allowed = Auth.loggedIn() && Auth.isAdmin();
+
   // Use Apollo's useQuery hook to fetch the contacts
   const { loading, error, data } = useQuery(GET_CONTACTS);
 
@@ -57,9 +65,16 @@ export default function ViewContacts() {
     );
   }
 
+  // Ensure user is authorized to view component
+  if (!allowed) {
+    return (
+        <Result status="403" title="403" subTitle="Sorry, you don't have permission to access this page." />
+    );
+  }
+
   // Display the list of contacts in a table once the data is available
   return (
-    <div style={{ padding: '20px' }}>
+    <div style={styles.container}>
       <h2>Submitted Contact Forms</h2>
       <Table
         columns={columns}

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Button, Modal, message } from 'antd';
 import { useMutation } from '@apollo/client';
 import { MARK_AS_PAID } from '../utils/mutations';
-import SquarePaymentForm from './UI/SquarePaymentForm';
+import SquarePaymentForm from './SquarePaymentForm';
 
 export default function Payment({ amount, appointmentId, onPaymentSuccess }) {
     const [isModalOpen, setIsModalOpen] = useState(false);

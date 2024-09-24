@@ -1,4 +1,4 @@
-import Nav from './UI/Nav';
+import Nav from './Nav';
 import { Flex } from 'antd';
 
 export default function Header() {

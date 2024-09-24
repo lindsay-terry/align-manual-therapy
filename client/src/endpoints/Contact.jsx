@@ -3,13 +3,25 @@ import { useMutation } from '@apollo/client';
 import { SUBMIT_CONTACT } from '../utils/mutations';
 import { Form, Input, Button, Alert } from 'antd';
 import { Card, Typography, Space } from 'antd';
-import MapComponent from './Map';
+import MapComponent from '../components/Map';
 import 'leaflet/dist/leaflet.css';
 
 const { Title, Text } = Typography;
 
 // The Contact component
 export default function Contact() {
+
+    const styles={
+        container: {
+            backgroundColor: 'var(--isabelline)',
+        },
+        customBtn: {
+            backgroundColor: 'var(--olive-2)',
+            color: 'var(--seasalt)',
+            padding: '20px',
+        },
+    }
+
     // formData holds the name, email, and message input values
     // setFormData updates the state
     const [formData, setFormData] = useState({ name: '', email: '', message: '' });
@@ -34,7 +46,7 @@ export default function Contact() {
                 variables: { ...formData },
             });
             
-            console.log('Form submitted successfully:', data);
+            console.log('Form submitted successfully!');
             form.resetFields(); 
             setFormData({ name: '', email: '', message: '' }); 
         } catch (error) {
@@ -44,7 +56,7 @@ export default function Contact() {
     };
 
     return (
-        <div>
+        <div style={styles.container}>
         <div style={{ maxWidth: '600px', margin: '0 auto', padding: '2rem' }}>
             <h2>How can we help?</h2>
             <Form form={form} layout="vertical" onFinish={handleSubmit}>
@@ -93,7 +105,7 @@ export default function Contact() {
                 </Form.Item>
                 <Form.Item>
                     <Button
-                        type="primary"
+                        style={styles.customBtn}
                         htmlType="submit"
                         loading={loading}
                         block
@@ -125,26 +137,31 @@ export default function Contact() {
             </div>
 
             <Space direction="vertical" size="large" style={{ width: '100%', textAlign: 'center' }}>
-            <Title level={2}>Contact Us</Title>
-
-            <Card bordered={true} style={{ maxWidth: 600, margin: '0 auto' }}>
-                <Space direction="vertical" size="middle" style={{ width: '100%' }}>
-                <Space direction="horizontal" size="large" style={{ justifyContent: 'space-between', width: '100%' }}>
-                    <Text strong>Phone Number</Text>
-                    <Text>(801) 867-4354</Text>
-                </Space>
-
-                <Space direction="horizontal" size="large" style={{ justifyContent: 'space-between', width: '100%' }}>
-                    <Text strong>Address</Text>
-                    <Text>225 North Bluff Street, Suite #23, St. George UT 84770</Text>
-                </Space>
-
-                <Space direction="horizontal" size="large" style={{ justifyContent: 'space-between', width: '100%' }}>
-                    <Text strong>Email</Text>
-                    <Text>ryan@alignmtherapy.com</Text>
-                </Space>
-                </Space>
-            </Card>
+                <Title level={2}>Contact Us</Title>
+                <Card bordered={true} style={{ maxWidth: '600px', margin: '0 auto', width: '100%' }}>
+                    <Space direction="vertical" size="middle" style={{ width: '100%' }}>
+                        {[
+                            { label: 'Phone Number', value: '(801) 867-4354' },
+                            { label: 'Address', value: '225 N Bluff St, Suite #23, St. George UT 84770' },
+                            { label: 'Email', value: 'ryan@alignmtherapy.com' },
+                        ].map(({ label, value }) => (
+                            <Space
+                                key={label}
+                                direction="horizontal"
+                                size="large"
+                                style={{
+                                    justifyContent: 'space-between',
+                                    width: '100%',
+                                    padding: '5px',
+                                    flexWrap: 'wrap', 
+                                }}
+                            >
+                                <Text strong style={{ flex: 1 }}>{label}</Text>
+                                <Text style={{ flex: 2 }}>{value}</Text>
+                            </Space>
+                        ))}
+                    </Space>
+                </Card>
             </Space>
             <MapComponent />
             <div style={{ marginBottom: '40px' }}></div>
