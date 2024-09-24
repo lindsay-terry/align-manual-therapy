@@ -18,8 +18,6 @@ export default function AdminEditServices({selectedService, onClose}) {
             padding: '10px',
             margin: '10px',
             width: '75%',
-            display: 'flex',
-            justifyContent: 'space-between'
         }
 
     }
@@ -29,7 +27,6 @@ export default function AdminEditServices({selectedService, onClose}) {
         name: '',
         description: '',
         options: [],
-        cleanup: 0,
     });
 
     const [updateService, { loading, error }] = useMutation(UPDATE_SERVICE);
@@ -43,8 +40,8 @@ export default function AdminEditServices({selectedService, onClose}) {
                 options: selectedService.options.map(option => ({
                     price: option.price,
                     duration: option.duration,
+                    cleanup: option.cleanup,
                 })),
-                cleanup: selectedService.cleanup,
             });
         }
     }, [selectedService]);
@@ -58,13 +55,13 @@ export default function AdminEditServices({selectedService, onClose}) {
 
     const handleSubmit = async () => {
         // Form data validation
-        if (!formData.name || !formData.description || formData.options.length === 0 || !formData.cleanup) {
+        if (!formData.name || !formData.description || formData.options.length === 0){
             console.error('Form data is invalid:', formData);
             return;
         }
         // Ensure options have data
         for (let option of formData.options) {
-            if (option.price <= 0 || option.duration <= 0) {
+            if (option.price <= 0 || option.duration <= 0 || option.cleanup <= 0) {
                 console.error('Invalid option data:', option);
                 return;
             }
@@ -86,9 +83,7 @@ export default function AdminEditServices({selectedService, onClose}) {
     }
 
     return (
-        <Space
-        direction="vertical"
-        style={{ width: '100%' }}>
+        <Space direction="vertical" style={{ width: '100%' }}>
             <Form onFinish={handleSubmit}>
                 <Form.Item label="Name" required>
                     <Input
@@ -104,30 +99,36 @@ export default function AdminEditServices({selectedService, onClose}) {
                     />
                 </Form.Item>
                 {formData.options.map((option, index) => (
-                    <div style={styles.optionsDiv} key={index}>
+                    <Space
+                        direction="vertical"
+                        style={styles.optionsDiv}
+                        key={index}
+                    >
                         <Form.Item label="Duration" required>
                             <InputNumber
                                 value={option.duration}
                                 min={0}
                                 onChange={(value) => handleChangeOptions(index, 'duration', value)}
                             />
+                            <span> min</span>
                         </Form.Item>
-                        <Form.Item label="Price" required>
+                        <Form.Item label="Cleanup" required>
+                            <InputNumber 
+                                value={option.cleanup}
+                                min={0}
+                                onChange={(value) => handleChangeOptions(index, 'cleanup', value )}
+                            />
+                            <span> min</span>
+                        </Form.Item>
+                        <Form.Item label="$ Price" required>
                             <InputNumber
                                 value={option.price}
                                 min={0}
                                 onChange={(value) => handleChangeOptions(index, 'price', value)}
                             />
                         </Form.Item>
-                    </div>
+                    </Space>
                 ))}
-                <Form.Item label="Cleanup Time (minutes)" required>
-                    <InputNumber 
-                        value={formData.cleanup}
-                        min={0}
-                        onChange={(value) => setFormData({ ...formData, cleanup: value })}
-                    />
-                </Form.Item>
                 <Form.Item style={{ display: 'flex', justifyContent: 'flex-end' }}>
                     <Button style={styles.saveBtn} htmlType="submit">Save</Button>
                 </Form.Item>

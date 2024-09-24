@@ -23,13 +23,12 @@ export const CREATE_USER = gql `
 `;
 
 export const CREATE_APPOINTMENT = gql`
-    mutation createAppointment($service: ID!, $user: ID!, $date: String!, $time: String!, $duration: Int!, $price: Float!) {
-        createAppointment(service: $service, user: $user, date: $date, time: $time, duration: $duration, price: $price) {
+    mutation createAppointment($service: ID!, $user: ID!, $date: String!, $time: String!, $duration: Int!, $cleanup: Int!, $price: Float!) {
+        createAppointment(service: $service, user: $user, date: $date, time: $time, duration: $duration, cleanup: $cleanup, price: $price) {
             _id
             service {
                 _id
                 name
-                cleanup
             }
             user {
                 _id
@@ -41,6 +40,7 @@ export const CREATE_APPOINTMENT = gql`
             date
             time
             duration
+            cleanup
             price
         }
     }
@@ -70,9 +70,9 @@ export const UPDATE_SERVICE = gql`
             description
             options{
                 price
+                cleanup
                 duration
             }
-            cleanup
         }
     }
 `;

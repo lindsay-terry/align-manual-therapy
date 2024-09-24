@@ -45,7 +45,7 @@ export default function AdminCalendarSetup() {
         const start = parseTime(appointment.date, appointment.time); // Parse date and time
     
         // Total duration = appointment duration + service cleanup (both in minutes)
-        const totalDuration = appointment.duration + appointment.service.cleanup;
+        const totalDuration = appointment.duration + appointment.cleanup;
     
         // Calculate the end time by adding total duration to start time
         const end = new Date(start.getTime() + totalDuration * 60000); // Convert to milliseconds

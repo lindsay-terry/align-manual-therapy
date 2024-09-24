@@ -130,24 +130,24 @@ const resolvers = {
         
         },
         createAppointment: async(parent, args) => {
-          try {
-              const dateObject = new Date(args.date);
-              const appointment = await Appointment.create({
-                ...args,
-                date: dateObject,
-              });
+            try {
+                const dateObject = new Date(args.date);
+                const appointment = await Appointment.create({
+                    ...args,
+                    date: dateObject,
+                });
 
-              const newAppointment = await Appointment.findById(appointment._id)
-                .populate('user')
-                .populate('service');
-                // Add appointment to user's appointment array
-              const updateUser = await User.findByIdAndUpdate(args.user, {
-                $addToSet: { appointments: newAppointment._id }}, { new: true });
-                // console.log('UPDATED USER', updateUser);
-              return newAppointment;
-          } catch (error) {
-              console.error('Error creating appointment', error);
-          }
+                const newAppointment = await Appointment.findById(appointment._id)
+                    .populate('user')
+                    .populate('service');
+                    // Add appointment to user's appointment array
+                const updateUser = await User.findByIdAndUpdate(args.user, {
+                    $addToSet: { appointments: newAppointment._id }}, { new: true });
+                    // console.log('UPDATED USER', updateUser);
+                return newAppointment;
+            } catch (error) {
+                console.error('Error creating appointment', error);
+            }
       },
 
         submitContact: async (_, { name, email, message }) => {
@@ -165,8 +165,8 @@ const resolvers = {
             // Return a success message
             return "Contact message received!";
             } catch (error) {
-            console.error("Error saving contact:", error);
-            throw new Error("Failed to submit contact form.");
+                console.error("Error saving contact:", error);
+                throw new Error("Failed to submit contact form.");
             }
         },
         // Update Service

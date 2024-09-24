@@ -13,10 +13,6 @@ const serviceSchema = new Schema({
         required: true,
     },
     options: [optionSchema],
-    cleanup: {
-        type: Number,
-        required: true,
-    },
     practitioner: [{ type: Schema.Types.ObjectId, ref: 'User'}]
 
 });

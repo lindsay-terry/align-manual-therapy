@@ -69,9 +69,9 @@ export default function AdminServices() {
                                     <li key={index}>
                                         <p><b>Price:</b> ${option.price}</p>
                                         <p><b>Duration:</b> {option.duration} minutes</p>
+                                        <p><b>Cleanup:</b> {option.cleanup} minutes</p>
                                     </li>
                                 ))}
-                                <li><b>Cleanup:</b> {service.cleanup} minutes</li>
                             </ul>
                             <div style={{ display: 'flex', justifyContent: 'flex-end'}}>
                                 <Button style={styles.customBtn} onClick={() => handleClickEdit(service)}>Edit Service</Button>
