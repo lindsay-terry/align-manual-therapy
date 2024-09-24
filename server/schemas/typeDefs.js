@@ -88,6 +88,14 @@ const typeDefs =`
         deleteUser(userId: ID!): User
         markAsPaid(appointmentId: ID!): Appointment
     }
+
+    type Query {
+        getContacts: [Contact]
+    }
+
+    type Mutation {
+        submitContact(name: String!, email: String!, message: String!): String
+    }
 `;
 
 module.exports = typeDefs;
