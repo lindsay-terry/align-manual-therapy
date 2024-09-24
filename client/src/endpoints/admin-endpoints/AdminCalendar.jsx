@@ -1,4 +1,3 @@
-import Payment from '../../components/Payment.jsx';
 import AdminCalendarSetup from '../../components/AdminCalendarSetup';
 import { Result } from 'antd';
 import Auth from '../../utils/auth';

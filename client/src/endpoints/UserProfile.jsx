@@ -1,13 +1,36 @@
 import { useState } from 'react';
-import { Descriptions, Row, Col, Card, Button } from 'antd';
-import UserEditProfile from '../components/UserEditProfile'; // Import the new component
+import { Descriptions, Row, Col, Button, Result } from 'antd';
+import UserEditProfile from '../components/UserEditProfile';
+import AppointmentCards from '../components/AppointmentCards';
 import { useQuery } from '@apollo/client';
 import { QUERY_ME } from '../utils/queries';
+import Auth from '../utils/auth';
 import dayjs from 'dayjs';
 
 export default function UserProfile() {
-    const { loading, error, data } = useQuery(QUERY_ME);
-    const [isEditing, setIsEditing] = useState(false); // Toggle edit mode
+    const styles ={
+        customImg: {
+            maxHeight: '200px'
+        },
+        container: {
+            backgroundColor: 'var(--isabelline)',
+        },
+        chart: {
+            backgroundColor: 'var(--seasalt)',
+        },
+        customHeader: {
+            margin: '0px',
+            padding: '20px',
+        },
+        payButton: {
+            padding: '20px',
+            marginTop: '10px'
+        }
+    }
+
+    const { loading, error, data, refetch } = useQuery(QUERY_ME);
+    // Toggle edit mode
+    const [isEditing, setIsEditing] = useState(false); 
 
     if (loading) return <p>Loading...</p>;
     if (error) return <p>Error: {error.message}</p>;
@@ -17,9 +40,16 @@ export default function UserProfile() {
 
     const toggleEditMode = () => setIsEditing(!isEditing);
 
+    // Verify user is logged in and if not, display please log in error
+    if (!Auth.loggedIn()) {
+        return (
+            <Result status="404" title='Please log in:' subTitle="Sorry, you must be logged in to view your profile!" />
+        )
+    }
+
     return (
-        <div>
-            <h1>Welcome {userData.firstName}!</h1>
+        <div style={styles.container}>
+            <h1 style={styles.customHeader}>Welcome {userData.firstName}!</h1>
             <Row gutter={16}>
                 <Col xs={24} sm={12}>
                     {isEditing ? (
@@ -41,7 +71,9 @@ export default function UserProfile() {
                         </Button>
                     )}
                 </Col>
-                {/* You can include the appointments or other information in another column if necessary */}
+                <Col xs={24} sm={12}>
+                    <AppointmentCards userData={userData} />
+                </Col>
             </Row>
         </div>
     );

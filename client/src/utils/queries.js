@@ -50,6 +50,7 @@ export const QUERY_ME = gql`
                 time
                 duration
                 price
+                isPaid
                 service {
                     _id
                     name
