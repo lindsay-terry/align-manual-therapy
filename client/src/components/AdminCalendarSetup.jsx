@@ -116,6 +116,7 @@ export default function AdminCalendarSetup() {
                 <div>
                     <p><strong>Service:</strong> {selectedAppointment.service.name}</p>
                     <p><strong>Duration:</strong> {selectedAppointment.duration} minutes</p>
+                    <p><strong>Cleanup:</strong> {selectedAppointment.cleanup} minutes</p>
                     <p><strong>Date:</strong> {selectedAppointment.start.toLocaleDateString()}</p>
                     <p><strong>Time:</strong> {formatTime(selectedAppointment.start)}</p>
                     <p><strong>Client:</strong> {selectedAppointment.user.firstName} {selectedAppointment.user.lastName}</p>
