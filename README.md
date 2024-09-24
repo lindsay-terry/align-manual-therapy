@@ -21,31 +21,31 @@ Align Manual Therapy is a professional massage therapy service offering a variet
 Navigate to the link below to access the application. 
 
 ### User Services
-    Browse services, make an account, book and view appointments, and make payments easily through the user-friendly interface. 
+Browse services, make an account, book and view appointments, and make payments easily through the user-friendly interface. 
     
-    The user must first make an account if they do not have one, and then must be logged in to book appointments and make payments.
+The user must first make an account if they do not have one, and then must be logged in to book appointments and make payments.
 
-    The homepage provides Align Manual Therapy's mission statement and a bit about what osteopathic manual therapy can help with. 
+The homepage provides Align Manual Therapy's mission statement and a bit about what osteopathic manual therapy can help with. 
 
-    On the bookings page are the provided services, a description, and the duration and price. From there the user can pick which service they'd like and then select a date from the calendar and see the available appointment times for that day. Once a time is selected the user can confirm and the appointment is booked.
+On the bookings page are the provided services, a description, and the duration and price. From there the user can pick which service they'd like and then select a date from the calendar and see the available appointment times for that day. Once a time is selected the user can confirm and the appointment is booked.
 
-    A completed booking will take the user to their profile that shows their information and their appointments, color coded for ease of viewing. The green cards show future appointments, the purple show appointments for the current day, and the gray cards show past appointments. Appointments can also be paid for here and user information can be edited as well. The user can click on the respective button to pay or edit profile.
+A completed booking will take the user to their profile that shows their information and their appointments, color coded for ease of viewing. The green cards show future appointments, the purple show appointments for the current day, and the gray cards show past appointments. Appointments can also be paid for here and user information can be edited as well. The user can click on the respective button to pay or edit profile.
 
-    On the reviews page the user can easily check out the amazing, 5 star Google reviews by clicking the button.
+On the reviews page the user can easily check out the amazing, 5 star Google reviews by clicking the button.
 
-    The education page shows the user Ryan's education qualifications and a current photo.
+The education page shows the user Ryan's education qualifications and a current photo.
 
-    On the contact page the user can fill out a contact form that will be sent directly to Align Manual Therapy. There is also more contact information and an interactive map for the user to view.
+On the contact page the user can fill out a contact form that will be sent directly to Align Manual Therapy. There is also more contact information and an interactive map for the user to view.
 
 
 ### Admin Services
-    On the admin side of Align Manual Therapy, the admin can view their calendar to see upcoming appointments, view the appointment details in full, and an option to run a payment for the appointment.
+On the admin side of Align Manual Therapy, the admin can view their calendar to see upcoming appointments, view the appointment details in full, and an option to run a payment for the appointment.
 
-    The admin can view the users and see their information, edit their information, add a note, or even delete the account. The admin can also upgrade a regular user to admin status.
+The admin can view the users and see their information, edit their information, add a note, or even delete the account. The admin can also upgrade a regular user to admin status.
 
-    The admin can view their services and edit title, description, duration, and price for each service.
+The admin can view their services and edit title, description, duration, and price for each service.
 
-    The admin can view the contact forms submitted by the client-side contact form page. These give the admin a quick message or question from the user and an email address that admin can contact the user by.
+The admin can view the contact forms submitted by the client-side contact form page. These give the admin a quick message or question from the user and an email address that admin can contact the user by.
 
 ### [Deployed Application on Railway/Render]()
 
