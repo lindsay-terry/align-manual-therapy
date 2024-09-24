@@ -86,7 +86,7 @@ export default function BookingCalendar({ selectedValue }) {
         // Map over the day's appointments to calculate and store the booked time slots (start and end times) for each appointment
         const bookedSlots = daysAppointments.map(appointment => {
             const startTime = appointment.time;
-            const endTime = appointmentDuration(startTime, appointment.duration, appointment.service.cleanup);
+            const endTime = appointmentDuration(startTime, appointment.duration, appointment.cleanup);
         
             return { start: startTime, end: endTime };
         });
@@ -174,9 +174,10 @@ export default function BookingCalendar({ selectedValue }) {
             time: dayjs(formattedTime).tz('America/Denver').format('hh:mm A'),
             price: selectedValue.price,
             duration: selectedValue.duration,
+            cleanup: selectedValue.cleanup,
             
         };
-
+        
         if (!selectedValue || !user.data._id || !day || !formattedTime) {
             console.error('Invalid input data', {
                 selectedValue,

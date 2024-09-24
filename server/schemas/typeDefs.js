@@ -13,11 +13,13 @@ const typeDefs =`
 
     type Option {
         duration: Int!
+        cleanup: Int! 
         price: Float!
     }
 
     input OptionInput {
         duration: Int!
+        cleanup: Int!
         price: Float!
     }
 
@@ -28,6 +30,7 @@ const typeDefs =`
         date: String!
         time: String!
         duration: Int!
+        cleanup: Int!
         price: Float!
         isPaid: Boolean!
     }
@@ -36,7 +39,6 @@ const typeDefs =`
         _id: ID!
         name: String!
         description: String!
-        cleanup: Int!
         options: [Option]
         practitioner: [User]
     }
@@ -45,7 +47,6 @@ const typeDefs =`
         name: String!
         description: String!
         options: [OptionInput]!
-        cleanup: Int!
     }
 
     type Contact {
@@ -78,7 +79,7 @@ const typeDefs =`
         login(email: String!, password: String!): Auth
         createUser( firstName: String!, lastName: String!, email: String!, password: String!, phone: String!, birthdate: String!): Auth
         processPayment(sourceId: String!, amount: Int!): PaymentResult!
-        createAppointment(service: ID!, user: ID!, date: String!, time: String!, duration: Int!, price: Float!): Appointment
+        createAppointment(service: ID!, user: ID!, date: String!, time: String!, duration: Int!, cleanup: Int!, price: Float!): Appointment
         updateService(id: ID!, input: UpdateServiceInput!): Service
         submitContact(name: String!, email: String!, message: String!): String
         addNoteToUser(userId: ID!, note: String!): User

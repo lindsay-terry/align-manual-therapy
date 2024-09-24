@@ -74,7 +74,7 @@ export default function BookServices() {
                 id: selectedService._id,
                 name: selectedService.name,
                 duration: option.duration,
-                cleanup: selectedService.cleanup,
+                cleanup: option.cleanup,
                 price: option.price,
             };
             setSelectedValue(serviceData);

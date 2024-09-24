@@ -1,30 +1,5 @@
 import { gql } from '@apollo/client';
 
-export const QUERY_USER = gql`
-    query user($email: String!) {
-        user(email: $email) {
-            _id
-            email
-            firstName
-            lastName
-            phone
-            birthdate
-            appointments {
-                _id
-                date
-                time
-                duration
-                price
-                service {
-                    _id
-                    name
-                    description
-                }
-            }
-        }     
-    }  
-`;
-
 export const QUERY_USERS = gql`
     query users {
         users {
@@ -46,9 +21,9 @@ export const QUERY_SERVICES = gql`
             _id
             name
             description
-            cleanup
             options {
                 duration
+                cleanup
                 price    
             }
             practitioner {
@@ -92,6 +67,7 @@ export const QUERY_APPOINTMENTS = gql`
             date
             time
             duration
+            cleanup
             price
             isPaid
             user {
@@ -104,9 +80,9 @@ export const QUERY_APPOINTMENTS = gql`
                 _id
                 name
                 description
-                cleanup
                 options {
                     duration
+                    cleanup
                     price
                 }
             }

@@ -25,6 +25,10 @@ const appointmentSchema = new Schema({
         type: Number,
         required: true,
     },
+    cleanup: {
+        type: Number,
+        required: true,
+    },
     price: {
         type: Number,
         required: true,
