@@ -11,6 +11,14 @@ const typeDefs =`
         notes: [String]
     }
 
+    input UpdateUserInput {
+        firstName: String!
+        lastName: String!
+        email: String!
+        phone: String!
+        birthdate: String!
+    }
+
     type Option {
         duration: Int!
         cleanup: Int! 
@@ -88,6 +96,7 @@ const typeDefs =`
         updateUserRole(userId: ID!, role: Int!): User
         deleteUser(userId: ID!): User
         markAsPaid(appointmentId: ID!): Appointment
+        updateUser(id: ID!, input: UpdateUserInput!): User
     }
 
     type Query {

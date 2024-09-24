@@ -119,4 +119,17 @@ export const MARK_AS_PAID = gql`
             isPaid
         }
     }    
-`
+`;
+
+export const UPDATE_USER = gql`
+    mutation updateUser($id: ID!, $input: UpdateUserInput!) {
+        updateUser(id: $id, input: $input) {
+            _id
+            firstName
+            lastName
+            email
+            phone
+            birthdate
+        }
+    }
+`;

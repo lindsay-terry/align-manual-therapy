@@ -40,32 +40,32 @@ const resolvers = {
             }
         },
         appointments: async () => {
-          try {
-              const appointments = await Appointment.find()
-              .populate('user')
-              .populate('service');
+            try {
+                const appointments = await Appointment.find()
+                .populate('user')
+                .populate('service');
 
-              return appointments.map(appointment => ({
-                ...appointment.toObject(),
-                date: appointment.date.toISOString(),
-              }));
-          } catch (error) {
-              throw new Error('Failed to fetch appointment data.');
-          }
-      },
+                return appointments.map(appointment => ({
+                    ...appointment.toObject(),
+                    date: appointment.date.toISOString(),
+                }));
+            } catch (error) {
+                throw new Error('Failed to fetch appointment data.');
+            }
+        },
 
       getContacts: async () => {
-        try {
-          const contacts = await Contact.find();
-          return contacts.map(contact => ({
-            ...contact._doc,
-            createdAt: contact.createdAt.toISOString()
-          }));
-        } catch (error) {
-          console.error("Error fetching contacts:", error);
-          throw new Error("Failed to fetch contacts.");
+            try {
+            const contacts = await Contact.find();
+            return contacts.map(contact => ({
+                ...contact._doc,
+                createdAt: contact.createdAt.toISOString()
+            }));
+            } catch (error) {
+            console.error("Error fetching contacts:", error);
+            throw new Error("Failed to fetch contacts.");
+            }
         }
-      }
     }, 
 
     Mutation: {
@@ -151,19 +151,17 @@ const resolvers = {
             } catch (error) {
                 console.error('Error creating appointment', error);
             }
-      },
+        },
 
-      submitContact: async (_, { name, email, message }) => {
-        const newContact = new Contact({
-          name,
-          email,
-          message
-        });
-        await newContact.save();
-        return "Contact message received!";
-      },
-      
-        // Update Service
+        submitContact: async (_, { name, email, message }) => {
+            const newContact = new Contact({
+            name,
+            email,
+            message
+            });
+            await newContact.save();
+            return "Contact message received!";
+        },
         updateService: async (parent, { id, input }) => {
             try {
                 const updatedService = await Service.findByIdAndUpdate(id, input, {
@@ -243,6 +241,24 @@ const resolvers = {
             } catch (error) {
                 console.error('Error updating appointment', error);
                 throw new Error('Error updating appointment as paid.');
+            }
+        },
+        updateUser: async (parent, { id, input }) => {
+            try {
+                const updatedUser = await User.findByIdAndUpdate(
+                    id,
+                    { $set: input },  // Only the provided fields will be updated
+                    { new: true, runValidators: true }
+                );
+        
+                if (!updatedUser) {
+                    throw new Error('User not found');
+                }
+        
+                return updatedUser;
+            } catch (error) {
+                console.error('Error updating user:', error);
+                throw new Error(error.message);
             }
         },
     },
