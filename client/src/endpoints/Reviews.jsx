@@ -1,6 +1,6 @@
 // Import necessary dependencies from React and Ant Design
 import React, { useEffect, useState } from 'react';
-import { Button, Modal, Typography, Layout } from 'antd';
+import { Button, Modal, Typography, Layout, Rate } from 'antd';
 
 import Sunset from '../assets/images/sunset.jpg';
 
@@ -10,6 +10,28 @@ const { Content } = Layout;
 
 // Define the Reviews component
 const Reviews = () => {
+    const styles = {
+        container: {
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            padding: '10px',
+        },
+        card: {
+            backgroundColor: 'var(--eerie-black)',
+            opacity: '80%',
+            borderRadius: '20px',
+            padding: '20px',
+            maxWidth: '400px',
+            textAlign: 'center',
+            color: 'var(--seasalt)',
+            fontSize: '115%'
+        },
+        stars: {
+            margin: '10px'
+        }
+    }
+
     // State to control the visibility of the modal
     const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -55,20 +77,25 @@ const Reviews = () => {
              }}>
             <Content className="reviews-container" style={{ textAlign: 'center' }}>
                 <Title level={1} style={{ fontFamily: 'Quicksand',}}>What Our Clients Are Saying</Title>
-                
+                <div style={styles.container}>
+                    <div style={styles.card}>
+                        <div>Click to see why we have a 5.0 overall Google Rating</div>
+                        <Rate style={styles.stars} disabled defaultValue={5} />
+                    </div>
+                </div>
                 {/* Button to open the modal */}
-                <Button 
-                type="primary" 
-                onClick={handleOpenModal} 
-                style={{ 
-                    marginTop: '150px', 
-                    padding: '20px 30px', // Adjust padding for larger size
-                    fontSize: '20px', 
-                }}
-                >
-                    Google Reviews
-                </Button>
-
+                    <Button 
+                    type="primary" 
+                    onClick={handleOpenModal} 
+                    style={{ 
+                        marginTop: '150px', 
+                        padding: '20px 30px', // Adjust padding for larger size
+                        fontSize: '20px', 
+                    }}
+                    >
+                        Google Reviews
+                    </Button>
+                   
                 {/* Modal component */}
                 <Modal
                     title="Customer Reviews"

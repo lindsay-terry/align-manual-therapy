@@ -1,4 +1,4 @@
-import BookServices from '../components/UI/BookServices';
+import BookServices from '../components/BookServices';
 
 export default function Book() {
 

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useMutation } from '@apollo/client';
-import { PROCESS_PAYMENT } from '../../utils/mutations';
+import { PROCESS_PAYMENT } from '../utils/mutations';
 import { PaymentForm, CreditCard } from 'react-square-web-payments-sdk';
 
 export default function SquarePaymentForm({ amount, onPaymentSuccess }) {

@@ -104,6 +104,7 @@ export default function AdminUsers() {
                 // Adds event listneer to each row to update user
                 onRow={(record) => ({
                     onClick: () => handleRowSelect(record),
+                    onMouseEnter: ((event) => (event.currentTarget.style.cursor = 'pointer'))
                 })}/>
             {showModal && editUser && (
              <AdminEditUser showModal={showModal} editUser={editUser} setShowModal={setShowModal} handleCancel={handleCancel} updateUserNotes={updateUserNotes} refetch={refetch} />
