@@ -54,15 +54,18 @@ const resolvers = {
           }
       },
 
-        getContacts: async () => {
-            try {
-            // Fetch all contacts from the database
-            return await Contact.find();
-            } catch (error) {
-            console.error("Error fetching contacts:", error);
-            throw new Error("Failed to fetch contacts.");
-            }
-        },
+      getContacts: async () => {
+        try {
+          const contacts = await Contact.find();
+          return contacts.map(contact => ({
+            ...contact._doc,
+            createdAt: contact.createdAt.toISOString()
+          }));
+        } catch (error) {
+          console.error("Error fetching contacts:", error);
+          throw new Error("Failed to fetch contacts.");
+        }
+      }
     }, 
 
     Mutation: {
@@ -150,25 +153,16 @@ const resolvers = {
             }
       },
 
-        submitContact: async (_, { name, email, message }) => {
-            try {
-            // Create a new contact record
-            const newContact = new Contact({
-                name,
-                email,
-                message,
-            });
-
-            // Save the contact to the database
-            await newContact.save();
-
-            // Return a success message
-            return "Contact message received!";
-            } catch (error) {
-                console.error("Error saving contact:", error);
-                throw new Error("Failed to submit contact form.");
-            }
-        },
+      submitContact: async (_, { name, email, message }) => {
+        const newContact = new Contact({
+          name,
+          email,
+          message
+        });
+        await newContact.save();
+        return "Contact message received!";
+      },
+      
         // Update Service
         updateService: async (parent, { id, input }) => {
             try {

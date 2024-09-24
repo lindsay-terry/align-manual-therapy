@@ -96,6 +96,7 @@ export const GET_CONTACTS = gql`
       name
       email
       message
+      createdAt
     }
   }
 `;

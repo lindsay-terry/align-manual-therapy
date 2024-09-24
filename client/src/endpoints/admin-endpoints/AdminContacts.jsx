@@ -2,6 +2,10 @@ import React from 'react';
 import { useQuery } from '@apollo/client';
 import { GET_CONTACTS } from '../../utils/queries';
 import { Table, Spin, Alert } from 'antd';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+
+dayjs.extend(utc);
 
 export default function ViewContacts() {
   // Use Apollo's useQuery hook to fetch the contacts
@@ -23,6 +27,12 @@ export default function ViewContacts() {
       title: 'Message',
       dataIndex: 'message',
       key: 'message',
+    },
+    {
+      title: 'Submitted At',
+      dataIndex: 'createdAt',
+      key: 'createdAt',
+      render: (createdAt) => dayjs.utc(createdAt).local().format('MMMM D, YYYY h:mm A'),
     },
   ];
 
