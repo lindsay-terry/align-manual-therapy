@@ -18,6 +18,9 @@ export default function Contact() {
     // data holds the response, loading is true when the mutation is in progress, and error holds any error that occurs
     const [submitContact, { data, loading, error }] = useMutation(SUBMIT_CONTACT);
 
+    // Initialize the form
+    const [form] = Form.useForm();
+
     // Function to handle input changes (when the user types into a form field)
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -30,19 +33,24 @@ export default function Contact() {
             await submitContact({
                 variables: { ...formData },
             });
+            
             console.log('Form submitted successfully:', data);
+            form.resetFields(); 
+            setFormData({ name: '', email: '', message: '' }); 
         } catch (error) {
             console.error('Error submitting the form:', error);
-        }
+        } 
+
     };
 
     return (
         <div>
-            <div style={{ maxWidth: '600px', margin: '0 auto', padding: '2rem' }}>
+        <div style={{ maxWidth: '600px', margin: '0 auto', padding: '2rem' }}>
             <h2>How can we help?</h2>
-            <Form layout="vertical" onFinish={handleSubmit}>
+            <Form form={form} layout="vertical" onFinish={handleSubmit}>
                 <Form.Item
                     label="Name"
+                    name="name"
                     rules={[{ required: true, message: 'Please enter your name!' }]}
                 >
                     <Input
@@ -54,9 +62,13 @@ export default function Contact() {
                 </Form.Item>
                 <Form.Item
                     label="Email"
+                    name="email"
                     rules={[
                         { required: true, message: 'Please enter your email!' },
-                        { type: 'email', message: 'Please enter a valid email!' }
+                        {
+                            pattern: /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/,
+                            message: 'Please enter a valid email address!'
+                        }
                     ]}
                 >
                     <Input
@@ -68,6 +80,7 @@ export default function Contact() {
                 </Form.Item>
                 <Form.Item
                     label="Message"
+                    name="message"
                     rules={[{ required: true, message: 'Please enter your message!' }]}
                 >
                     <Input.TextArea
@@ -109,6 +122,8 @@ export default function Contact() {
                     style={{ marginTop: '20px' }}
                 />
             )}
+            </div>
+
             <Space direction="vertical" size="large" style={{ width: '100%', textAlign: 'center' }}>
             <Title level={2}>Contact Us</Title>
 
@@ -131,9 +146,8 @@ export default function Contact() {
                 </Space>
             </Card>
             </Space>
+            <MapComponent />
+            <div style={{ marginBottom: '40px' }}></div>
         </div>
-        <MapComponent />
-        <div style={{ marginBottom: '20px' }}></div>
-    </div>
     );
 }
