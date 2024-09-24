@@ -1,12 +1,19 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useMutation } from '@apollo/client';
 import { PROCESS_PAYMENT } from '../../utils/mutations';
 import { PaymentForm, CreditCard } from 'react-square-web-payments-sdk';
 
 export default function SquarePaymentForm({ amount, onPaymentSuccess }) {
   const [processPayment] = useMutation(PROCESS_PAYMENT);
+  const [retryCount, setRetryCount] = useState(0); // Track retry count
 
-  const handlePayment = async (token) => {
+  const maxRetries = 3; // Number of retry attempts
+
+  // Helper function to delay retries
+  const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
+  // Retry logic for payment process
+  const handlePaymentWithRetry = async (token, retries = 0) => {
     try {
       const { data } = await processPayment({
         variables: {
@@ -28,7 +35,17 @@ export default function SquarePaymentForm({ amount, onPaymentSuccess }) {
       }
     } catch (error) {
       console.error('Error processing payment:', error);
-      onPaymentSuccess(false);
+
+      // Retry if the error is transient and retry count hasn't exceeded max retries
+      if (retries < maxRetries) {
+        console.log(`Retrying payment... (${retries + 1}/${maxRetries})`);
+        await delay(1000); // Delay for 1 second before retrying
+        setRetryCount(retries + 1);
+        await handlePaymentWithRetry(token, retries + 1);
+      } else {
+        console.error('Max retries reached. Payment failed.');
+        onPaymentSuccess(false);
+      }
     }
   };
 
@@ -38,7 +55,7 @@ export default function SquarePaymentForm({ amount, onPaymentSuccess }) {
       locationId={import.meta.env.VITE_SQUARE_LOCATION_ID}
       cardTokenizeResponseReceived={async (token) => {
         if (token) {
-          await handlePayment(token.token);
+          await handlePaymentWithRetry(token.token); // Use retry function
         }
       }}
     >
