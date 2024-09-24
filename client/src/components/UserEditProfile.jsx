@@ -2,8 +2,23 @@ import { useMutation } from '@apollo/client';
 import { useState } from 'react';
 import { UPDATE_USER } from '../utils/mutations';
 import { Button, Input, Form } from 'antd';
+import dayjs from 'dayjs';
 
 export default function UserEditProfile({ userData, toggleEditMode }) {
+    const styles = {
+        cancelBtn: {
+            marginLeft: '8px',
+            padding: '20px',
+            backgroundColor: 'var(--bittersweet)',
+            color: 'var(--seasalt',
+        },
+        saveBtn: {
+            padding: '20px',
+            backgroundColor: 'var(--olive-2)',
+            color: 'var(--seasalt)',
+        }
+    }
+
     const [form] = Form.useForm();
     const [updateUser, { loading, error }] = useMutation(UPDATE_USER);
     
@@ -13,7 +28,7 @@ export default function UserEditProfile({ userData, toggleEditMode }) {
         lastName: userData.lastName,
         email: userData.email,
         phone: userData.phone,
-        birthdate: userData.birthdate
+        birthdate: dayjs(userData.birthdate).format('MM/DD/YYYY'),
     });
 
     const handleFormChange = (changedValues) => {
@@ -69,10 +84,10 @@ export default function UserEditProfile({ userData, toggleEditMode }) {
 
             {error && <p>Error updating user: {error.message}</p>}
 
-            <Button type="primary" htmlType="submit" loading={loading}>
+            <Button style={styles.saveBtn} htmlType="submit" loading={loading}>
                 Save Changes
             </Button>
-            <Button onClick={toggleEditMode} style={{ marginLeft: '8px' }}>
+            <Button style={styles.cancelBtn} onClick={toggleEditMode}>
                 Cancel
             </Button>
         </Form>
