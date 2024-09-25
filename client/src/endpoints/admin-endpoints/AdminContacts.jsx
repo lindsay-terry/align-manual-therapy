@@ -11,6 +11,7 @@ export default function ViewContacts() {
     container: {
       padding: '20px',
       backgroundColor: 'var(--isabelline)',
+      minHeight: '70vh',
     }
   }
   // Security check to ensure only admins have access to this endpoint

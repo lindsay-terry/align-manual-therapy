@@ -11,7 +11,7 @@ export default function Nav() {
     const styles={
         activeLink: {
             color: 'var(--olive-2)',
-            padding: '30px',
+            padding: isSmallScreen? '' : '30px',
             fontWeight: 'bold',
         },
         inactiveLink: {
