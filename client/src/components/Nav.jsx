@@ -16,7 +16,7 @@ export default function Nav() {
         },
         inactiveLink: {
             textDecoration: 'none',
-            padding: '20px',
+            padding: isSmallScreen? '' : '20px',
             color: 'var(--black-olive)',
         },
         menuButton: {
@@ -25,12 +25,14 @@ export default function Nav() {
         },
         navLinks: {
             display: isSmallScreen? 'none' : 'block',
-            gap: '20px',
             margin: '10px'
         },
         logoutBtn: {
             backgroundColor: 'var(--olive-2)',
             color: 'var(--seasalt)',
+        },
+        menuItem: {
+            textDecoration: 'none',
         }
     }
 
@@ -56,7 +58,7 @@ export default function Nav() {
     // Watch for changes in screen size state to handle styling for screen sizes
     useEffect(() => {
         const beResponsive = () => {
-            setIsSmallScreen(window.matchMedia('(max-width: 880px').matches);
+            setIsSmallScreen(window.matchMedia('(max-width: 880px)').matches);
         };
 
         window.addEventListener('resize', beResponsive);
@@ -128,8 +130,8 @@ export default function Nav() {
             </Flex>
 
             {/* Use drawer component for menu on smaller screens */}
-            <Drawer title='Menu' placement='right' closable={true} onClose={closeDrawer} open={open}>
-                <Menu mode='vertical' selectedKeys={[location.pathname]} items={menuItems} />
+            <Drawer title='Menu' placement='right' closable={true} onClose={closeDrawer} open={open} style={{ margin: '20px' }}>
+                <Menu style={styles.menuItem} mode='vertical' selectedKeys={[location.pathname]} items={menuItems} />
             </Drawer>
         </Flex>
     )
