@@ -1,0 +1,16 @@
+:root {
+    --isabelline: #F4F0EFff;
+    --olive-2: #888328ff;
+    --black-olive: #313920ff;
+    --eerie-black: #19231Bff;
+    --black-bean: #491510ff;
+    --seasalt: #FBFAF8;
+    /* for cancel buttons  */
+    --bittersweet: #df3529;
+}
+
+body {
+    font-family: "Quicksand", sans-serif;
+    font-weight: 400;
+    color: var(--eerie-black);
+}

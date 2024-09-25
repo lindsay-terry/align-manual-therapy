@@ -10,12 +10,21 @@
         "preview": "vite preview"
     },
     "dependencies": {
+        "@ant-design/icons": "^5.4.0",
         "@apollo/client": "^3.7.14",
+        "antd": "^5.20.6",
+        "dayjs": "^1.11.13",
+        "dotenv": "^16.4.5",
         "graphql": "^16.6.0",
-        "jwt-decode": "^4.0.0",
+        "jwt-decode": "^3.1.2",
+        "leaflet": "^1.9.4",
         "react": "^18.2.0",
+        "react-big-calendar": "^1.14.1",
+        "react-calendar": "^5.0.0",
+        "react-datepicker": "^7.3.0",
         "react-dom": "^18.2.0",
-        "react-router-dom": "^6.11.2"
+        "react-router-dom": "^6.11.2",
+        "react-square-web-payments-sdk": "^3.2.1"
     },
     "devDependencies": {
         "@types/react": "^18.0.28",

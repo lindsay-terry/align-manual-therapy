@@ -1,0 +1,63 @@
+[
+    {
+        "name": "Manual Therapy: First Appointment",
+        "description": "First appointment for Osteopathic Manual Therapy clients.  Please come in a t-shirt or pants with an elastic waistband (NOT jeans).",
+        "options": [
+            { "duration": 60, "cleanup": 30, "price": 160.00}
+        ]
+    },
+    {
+        "name": "Manual Therapy: Repeat Appointment",
+        "description": "Repeat appointment for Osteopathic Manual Therapy clients.  Please come in a t-shirt or pants with an elastic waistband (NOT jeans).",
+        "options": [
+            { "duration": 40, "cleanup": 5, "price": 100.00}
+        ]
+    },
+    {
+        "name": "Swedish Massage",
+        "description": "Swedish Massage uses long flowing techniques that target the surface layer of the body's muscles. This creates a flow of energy that naturally releases stress and anxiety, bringing overall relaxation to the body and mind.",
+        "options": [
+            { "duration": 80, "cleanup": 10, "price": 150.00 },
+            { "duration": 120, "cleanup": 15, "price": 200.00}
+        ]
+    },
+    {
+        "name": "Deep Tissue Massage",
+        "description": "Deep tissue massage targets chronic tension in muscles that lie far below the body's surface.  Deep muscle techniques involve slow strokes, direct pressure or friction movements that go across the muscle grain.",
+        "options": [
+            { "duration": 80, "cleanup": 10, "price": 150.00 },
+            { "duration": 120, "cleanup": 15, "price": 200.00}
+        ]
+    },
+    {
+        "name": "Lymphatic Massage",
+        "description": "Stimulates blood circulation and tissue regeneration.  Directs and increases lymphatic flow, promoting faster removal of excess interstitial fluid.  Reduces swelling and water retention.  Improves the immune system due to the important elimination of toxins.",
+        "options": [
+            { "duration": 80, "cleanup": 10, "price": 150.00 },
+            { "duration": 120, "cleanup": 15, "price": 200.00}
+        ]
+    },
+    {
+        "name": "Prenatal Massage",
+        "description": "Prenatal massage",
+        "options": [
+            { "duration": 80, "cleanup": 10, "price": 150.00 },
+            { "duration": 120, "cleanup": 15, "price": 200.00}
+        ]
+    },
+    {
+        "name": "Himalayan Hot Stone Massage",
+        "description": "Himalayan Hot Stone",
+        "options": [
+            { "duration": 80, "cleanup": 10, "price": 150.00 },
+            { "duration": 120, "cleanup": 15, "price": 200.00}
+        ]
+    },
+    {
+        "name": "Gua Sha (Scraping)",
+        "description": "Gua Sha is a way to restore proper circulation to the musculature and surrounding tissues.  By loosening fascia, detoxifying and flushing out lactic acid and other chemical mediators, increasing collagen production, increasing the production of hyaluronic acid, and to signal the body to re-repair local tissue damaged by surgery, injury, or chronic muscle tension. This technique is used to promote normal circulation in the muscles, tissues, and organs directly beneath the surface area being treated.",
+        "options": [
+            { "duration": 80, "cleanup": 10, "price": 150.00 }
+        ]
+    }
+]
