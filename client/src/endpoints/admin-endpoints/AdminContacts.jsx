@@ -11,6 +11,7 @@ export default function ViewContacts() {
     container: {
       padding: '20px',
       backgroundColor: 'var(--isabelline)',
+      minHeight: '70vh',
     }
   }
   // Security check to ensure only admins have access to this endpoint
@@ -81,6 +82,7 @@ export default function ViewContacts() {
         dataSource={data.getContacts}
         rowKey={(record) => record.email} // You can use a unique field like email as the row key
         bordered
+        scroll={{ x: 'max-content' }}
       />
     </div>
   );
