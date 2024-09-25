@@ -22,8 +22,10 @@ export default function AboutUs() {
         borderStyle: {
             borderBottom: '1px solid black', 
             margin: '10px 0', 
-            width: '870px',
-            
+            paddingBottom: '3px',
+            maxWidth: '870px',
+            minWidth: '300px',
+            width: '60vw', 
         },
         button: {
             marginTop: '20px',

@@ -81,6 +81,7 @@ export default function ViewContacts() {
         dataSource={data.getContacts}
         rowKey={(record) => record.email} // You can use a unique field like email as the row key
         bordered
+        scroll={{ x: 'max-content' }}
       />
     </div>
   );
