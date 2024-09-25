@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Calendar, Views, dayjsLocalizer } from 'react-big-calendar';
 import { useQuery } from '@apollo/client';
 import dayjs from 'dayjs';
@@ -11,11 +11,35 @@ import Payment from './Payment.jsx';
 const localizer = dayjsLocalizer(dayjs);
 
 export default function AdminCalendarSetup() {
+    // State for managing responsiveness for calendar view
+    const [isSmallScreen, setIsSmallScreen] = useState(window.matchMedia('(max-width: 880px)').matches);
 
     const [view, setView] = useState(Views.WEEK);
     const [modalOpen, setModalOpen] = useState(false);
     const [selectedAppointment, setSelectedAppointment] = useState(null);
-    const [isPaid, setIsPaid] = useState(false); // Track payment statu
+    const [isPaid, setIsPaid] = useState(false); // Track payment status
+
+    useEffect(() => {
+        const mediaQuery = window.matchMedia('(max-width: 880px)');
+
+        const handleScreenChange = (event) => {
+            setIsSmallScreen(event.matches); // Update state based on media query match
+        };
+
+        // Initial check
+        setIsSmallScreen(mediaQuery.matches);
+
+        // Add listener for screen changes
+        mediaQuery.addEventListener('change', handleScreenChange);
+
+        // Cleanup the event listener on component unmount
+        return () => mediaQuery.removeEventListener('change', handleScreenChange);
+    }, []);
+
+    useEffect(() => {
+        // Update view based on screen size
+        isSmallScreen ? setView(Views.DAY) : setView(Views.WEEK);
+    }, [isSmallScreen]);
 
     // Fetch appointments from GraphQL - Always fetch from network not cached value
     const { loading, error, data, refetch} = useQuery(QUERY_APPOINTMENTS, {
@@ -94,7 +118,7 @@ export default function AdminCalendarSetup() {
             startAccessor="start"
             endAccessor="end"
             style={{ height: 500, margin: '50px' }}
-            defaultView={view}
+            view={view} // Bind view state directly to the Calendar's view prop
             onView={(newView) => setView(newView)} // Handle view changes
             eventPropGetter={() => ({
                 style: { whiteSpace: 'pre-wrap' }, // Allow line breaks in event titles

@@ -14,6 +14,7 @@ export default function UserProfile() {
         },
         container: {
             backgroundColor: 'var(--isabelline)',
+            minHeight: '70vh',
         },
         chart: {
             backgroundColor: 'var(--seasalt)',
