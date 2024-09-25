@@ -91,7 +91,7 @@ export default function Nav() {
         label: Auth.loggedIn() && item.path === '/login' ? (
             <Button onClick={handleLogout} style={styles.inactiveLink}>Logout</Button>
         ) : (
-            <Link to={item.path} style={location.pathname === item.path ? styles.activeLink : styles.inactiveLink}>
+            <Link to={item.path} style={location.pathname === item.path ? styles.activeLink : styles.inactiveLink} onClick={isSmallScreen ? closeDrawer : undefined}>
                 {item.label}
             </Link>
         )
@@ -117,8 +117,9 @@ export default function Nav() {
             {/* Navigation menu links for larger screens  */}
             <Flex style={styles.navLinks} >
                 {navItems.map((item) => (
-                    <Link key={item.path} to={item.path} style={location.pathname === item.path ? styles.activeLink : styles.inactiveLink } >
-                        {item.label}
+                    <Link key={item.path} to={item.path} style={location.pathname === item.path ? styles.activeLink : styles.inactiveLink } 
+                        onClick={closeDrawer}>
+                       {item.label}
                     </Link>
                 ))}
                     {Auth.loggedIn() && (

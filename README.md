@@ -49,7 +49,7 @@ The admin can view the contact forms submitted by the client-side contact form p
 
 ### [Deployed Application on Railway/Render]()
 
-![Screenshot of home page](./client/src/assets/images/homepage-screenshot.png) 
+![Screenshot of home page](./client/src/assets/images/homepage-screenshot.jpg) 
 
 ![Screenshot of user profile](./client/src/assets/images/profile-screenshot.png) 
 
