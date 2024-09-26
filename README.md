@@ -4,7 +4,7 @@
 
 
 ## Description
-Discover Align Manual Therapy with Ryan Osguthorpe, LMT in St.George, Utah.  Experience personalized massage services designed to relieve tension and promote wellness. Book your appointment today for a revitalizing experience!
+Discover Align Manual Therapy with Ryan Osguthorpe, LMT in St. George, Utah.  Experience personalized massage services designed to relieve tension and promote wellness. Book your appointment today for a revitalizing experience!
 
 Align Manual Therapy is a professional massage therapy service offering a variety of treatments to help clients Align their mind and body to achieve a higher quality of life. Using the MERN-stack to create a single-page application, Align Manual Therapy is designed to streamline the process of booking a session, managing appointments and payments, and providing key information for clients, along with admin capabilities to keep track of clients, appointments, services, and payments.
 
@@ -18,9 +18,10 @@ Align Manual Therapy is a professional massage therapy service offering a variet
 
 
 ## Usage
-Navigate to the link below to access the application. 
+Navigate to the link below to access the application.
+### [Deployed Application on Railway](https://align-manual-therapy-production.up.railway.app/)
 
-### User Services
+### User Features
 Browse services, make an account, book and view appointments, and make payments easily through the user-friendly interface. 
     
 The user must first make an account if they do not have one, and then must be logged in to book appointments and make payments.
@@ -38,7 +39,7 @@ The education page shows the user Ryan's education qualifications and a current 
 On the contact page the user can fill out a contact form that will be sent directly to Align Manual Therapy. There is also more contact information and an interactive map for the user to view.
 
 
-### Admin Services
+### Admin Features
 On the admin side of Align Manual Therapy, the admin can view their calendar to see upcoming appointments, view the appointment details in full, and an option to run a payment for the appointment.
 
 The admin can view the users and see their information, edit their information, add a note, or even delete the account. The admin can also upgrade a regular user to admin status.
@@ -47,7 +48,7 @@ The admin can view their services and edit title, description, duration, and pri
 
 The admin can view the contact forms submitted by the client-side contact form page. These give the admin a quick message or question from the user and an email address that admin can contact the user by.
 
-### [Deployed Application on Railway/Render]()
+### [Deployed Application on Railway](https://align-manual-therapy-production.up.railway.app/)
 
 ![Screenshot of home page](./client/src/assets/images/homepage-screenshot.jpg) 
 
