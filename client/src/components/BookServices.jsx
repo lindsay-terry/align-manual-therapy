@@ -13,42 +13,54 @@ export default function BookServices() {
             color: 'var(--seasalt)',
             backgroundColor: 'var(--olive-2)',
             padding: '20px',
-            fontSize: '150%,'
+            fontSize: '150%,',
+            marginTop: '10px',
+            marginBottom: '10px',
+            marginLeft: 'auto',
+            marginRight: 'auto',
+            width: '90%',
         },
         container: {
             display: 'flex',
             flexDirection: 'column',
-            padding: '20px',
-            margin: '25px',
+            padding: '0px',
+            margin: '5px',
             backgroundColor: 'var(--seasalt)',
             boxShadow: '0 1px 10px var(--black-olive)',
             maxWidth: '450px',
-            borderRadius: '5%'
+            borderRadius: '8px'
         },
         customPanel: {
             maxWidth: '400px',
         },
         customCard: {
-            margin: '10px',
+            margin: '5px',
             maxWidth: '300px',
+            padding: '0px',
         },
         description: {
             border: '1px solid var(--black-olive)',
-            borderRadius: '5%',
+            borderRadius: '8px',
             padding: '10px',
         },
         radio: {
             display: 'flex',
             justifyContent: 'center',
             border: '1px solid var(--black-olive)',
-            borderRadius: '10px',
+            borderRadius: '8px',
             margin: '5px',
         }
     }
 
     // Query all services
-    const { loading, data } = useQuery(QUERY_SERVICES); // I should have all the information here but by the time it gets to selectedValue I have less
-    const services = data ? data.services : [];
+    const { loading, data } = useQuery(QUERY_SERVICES);
+    let services = data ? data.services : [];
+
+    // Sort services alphabetically (create a new array before sorting)
+    services = [...services].sort((a, b) => a.name.localeCompare(b.name));
+    // Futre development create a priority field to sort services how admin would like them to display
+    // services = [...services].sort((a, b) => a.priority - b.priority);
+
     // State to manage value selected from radio input form
     const [selectedValue, setSelectedValue] = useState(null);
     // State to manage if form or calendar is visible
@@ -116,7 +128,7 @@ export default function BookServices() {
             <Button block={true} disabled={!selectedValue} style={styles.nextBtn} onClick={handleSubmit}>Next</Button>
             ) : (
                 <div>
-                    <p>Must be logged in to book services.</p>
+                    <p style={{ textAlign: 'center', marginBottom: '0px'}}>Must be logged in to book services.</p>
                     <div style={{display: 'flex', justifyContent: 'space-evenly'}}>
                         <Link to='/signup'>
                             <Button style={styles.nextBtn}>Sign up</Button>
