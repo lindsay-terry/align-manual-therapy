@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
-import { Card, Button } from 'antd';
+import { Card, Button, Modal, notification } from 'antd';
 import alignlogo from '../assets/images/alignlogo.webp';
 import dayjs from 'dayjs';
-import Payment from '../components/Payment';
+import Payment from './Payment';
+import RescheduleAppointment from './RescheduleAppointment';
 
 export default function AppointmentCards({ userData, refetch }) {
 
@@ -20,9 +21,34 @@ export default function AppointmentCards({ userData, refetch }) {
         payButton: {
             padding: '20px',
         },
+        buttonDiv: {
+            display: 'flex',
+            justifyContent: 'space-between'
+        },
+        editApptDiv: {
+            display: 'flex',
+            margin: '10px',
+        },
+        rescheduleBtn: {
+            margin: '5px',
+            padding: '10px'
+        },
+        cancelApptBtn: {
+            margin: '5px',
+            padding: '10px',
+            backgroundColor: 'var(--bittersweet)',
+            color: 'var(--seasalt)'
+        }
     }
     // State to manage visibility of link to payment form
     const [showPayment, setShowPayment] = useState(false);
+    const [showRescheduleModal, setShowRescheduleModal] = useState(false);
+    const [selectedAppointment, setSelectedAppointment] = useState(null);
+
+    const handleClickReschedule = (appointmentId) => {
+        setSelectedAppointment(appointmentId)
+        setShowRescheduleModal(true);
+    }
 
     const handlePay = (appointmentId) => {
         setShowPayment((prev) => ({ ...prev, [appointmentId]: true }));
@@ -32,7 +58,15 @@ export default function AppointmentCards({ userData, refetch }) {
     const handlePaymentSuccess = (appointmentId) => {
         setShowPayment((prev) => ({ ...prev, [appointmentId]: false}));
         refetch();
-    }
+    };
+
+    const handleUpdateSuccess = () => {
+        setShowRescheduleModal(false);
+        notification.success({
+            message: 'Success!',
+            description: 'Appointment successfully rescheduled',
+        });
+    };
 
     // Refetch user data on updates
     useEffect(() => {
@@ -87,16 +121,29 @@ export default function AppointmentCards({ userData, refetch }) {
                                 <img src={alignlogo} alt="Align Manual Therapy logo" style={{maxHeight: '150px'}}></img>
                             </div>
                         </div>
-                        {/* If appointment is paid, show paid.  If not, give option to pay now */}
-                        {!appointment.isPaid ? (
-                            <Button style={styles.payButton} key={appointment._id} onClick={() => handlePay(appointment._id)}>
-                                Pay Now
-                            </Button>
-                        ) : (
-                            <Button style={styles.payButton} key={appointment._id} disabled>
-                                Paid!
-                            </Button>
-                        )}
+                        <div style={styles.buttonDiv}>
+                            {/* If appointment is paid, show paid.  If not, give option to pay now */}
+                            {!appointment.isPaid ? (
+                                <Button style={styles.payButton} key={appointment._id} onClick={() => handlePay(appointment._id)}>
+                                    Pay Now
+                                </Button>
+                            ) : (
+                                <Button style={styles.payButton} key={appointment._id} disabled>
+                                    Paid!
+                                </Button>
+                            )}
+                            {/* Conditional rendering for reschedule or cancel buttons based on when appointment is */}
+                            {isPast? (
+                                ''
+                            ) : isToday? (
+                                ''
+                            ) : (
+                                <div style={styles.editApptDiv}>
+                                    <Button style={styles.rescheduleBtn} key={`${appointment._id}:reschedule`} onClick={() => handleClickReschedule(appointment._id)}>Reschedule</Button>
+                                    <Button style={styles.cancelApptBtn} key={`${appointment._id}:cancel`}>Cancel Appointment</Button>
+                                </div>
+                            )}
+                        </div>      
                         {/* State showPayment updated by appointment._id to lead user to payment form */}
                         {showPayment[appointment._id] && (
                             <Payment amount={appointment.price*100} appointmentId={appointment._id} onPaymentSuccess={() => handlePaymentSuccess(appointment._id)}/>
@@ -104,6 +151,20 @@ export default function AppointmentCards({ userData, refetch }) {
                     </Card>
                 )
             })}
+
+            {showRescheduleModal? (
+                <Modal
+                    title="Reschedule Appointment"
+                    open={showRescheduleModal}
+                    footer={null}
+                    onCancel={() => setShowRescheduleModal(false)}
+                    destroyOnClose={true}
+                >
+                    <RescheduleAppointment appointmentId={selectedAppointment} handleUpdateSuccess={handleUpdateSuccess}/>
+                </Modal>
+            ) : (
+                ''
+            )}
         </div>
     )
 };

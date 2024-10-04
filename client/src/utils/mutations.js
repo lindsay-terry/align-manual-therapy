@@ -46,6 +46,25 @@ export const CREATE_APPOINTMENT = gql`
     }
 `;
 
+export const UPDATE_APPOINTMENT = gql`
+    mutation updateAppointment($appointmentId: ID!, $service: ID, $user: ID, $date: String, $time: String, $price: Float, $duration: Int, $cleanup: Int) {
+        updateAppointment(appointmentId: $appointmentId, service: $service, user: $user, date: $date, time: $time, price: $price, duration: $duration, cleanup: $cleanup) {
+            _id
+            user {
+                _id
+            }
+            service {
+                _id
+            }
+            date
+            time
+            duration
+            cleanup
+            price
+        }
+    }
+`;
+
 export const PROCESS_PAYMENT = gql`
   mutation ProcessPayment($sourceId: String!, $amount: Int!) {
     processPayment(sourceId: $sourceId, amount: $amount) {

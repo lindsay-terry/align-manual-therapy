@@ -11,10 +11,10 @@ import customParseFormat from 'dayjs/plugin/customParseFormat';
 import { generateTimeSlots, appointmentDuration } from '../utils/timeslots';
 import { useQuery, useMutation } from '@apollo/client';
 import { QUERY_APPOINTMENTS } from '../utils/queries';
-import { CREATE_APPOINTMENT } from '../utils/mutations';
+import { CREATE_APPOINTMENT, UPDATE_APPOINTMENT } from '../utils/mutations';
 import Auth from '../utils/auth';
 
-export default function BookingCalendar({ selectedValue }) {
+export default function BookingCalendar({ selectedValue, handleUpdateSuccess, existingAppointments = [] }) {
     const styles={
         container: {
             padding: '30px',
@@ -58,11 +58,15 @@ export default function BookingCalendar({ selectedValue }) {
     dayjs.extend(customParseFormat);
     // Querying existing appointments - Always fetch from network not cached value
     const { loading, data, refetch } = useQuery(QUERY_APPOINTMENTS, {
-        fetchPolicy: "network-only"
+        fetchPolicy: "network-only",
+        // Skip if getting data from props passed by RescheduleAppointment
+        skip: existingAppointments.length > 0
     });
-    const appointments = data ? data.appointments : [];
+
+    const appointments = existingAppointments.length > 0 ? existingAppointments : (data ? data.appointments : []);
 
     const [createAppointment] = useMutation(CREATE_APPOINTMENT);
+    const [updateAppointment] = useMutation(UPDATE_APPOINTMENT);
 
     const [day, setDay] = useState('');
     const [displayDay, setDisplayDay] = useState('');
@@ -168,6 +172,7 @@ export default function BookingCalendar({ selectedValue }) {
         const parsedDate = dayjs(day).toISOString();
     
         const variables = {
+            appointmentId: selectedValue.appointmentId,
             service: selectedValue.id,
             user: user.data._id,
             date: parsedDate,
@@ -175,7 +180,6 @@ export default function BookingCalendar({ selectedValue }) {
             price: selectedValue.price,
             duration: selectedValue.duration,
             cleanup: selectedValue.cleanup,
-            
         };
         
         if (!selectedValue || !user.data._id || !day || !formattedTime) {
@@ -189,12 +193,20 @@ export default function BookingCalendar({ selectedValue }) {
         }
 
         try {
-            await createAppointment({ variables });
-            await refetch(); // Refetch right after mutation
-            // Redirect to user's page
+            if (selectedValue.appointmentId) {
+                await updateAppointment({ variables });
+                // Successfully updated appointment (rescheduled)
+                handleUpdateSuccess();
+                refetch();
+            } else {
+                await createAppointment({ variables });
+            }
+            await refetch();
             navigate('/profile');
-        } catch (error) {
-            console.error('Error saving appointment HERE IS THE ERROR:', error);
+            setShowModal(false);
+        }
+         catch (error) {
+            console.error('Error saving appointment,', error);
         }
     };
 
