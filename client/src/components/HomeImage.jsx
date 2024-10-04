@@ -1,6 +1,20 @@
 import HomeImg from '../assets/images/trees.jpg';
+import { Grid } from 'antd';
+const { useBreakpoint } = Grid;
 
 export default function HomeImage() {
+    const screens = useBreakpoint();
+    console.log(screens)
+
+    // Adjust the priority of breakpoints
+    const getFontSize = () => {
+        if (screens.xl) return '3vw';  // Extra large screens
+        if (screens.lg) return '4vw';  // Large screens
+        if (screens.md) return '5vw';  // Medium screens
+        if (screens.sm) return '7vw';  // Small screens
+        return '8vw';  // Extra small screens
+    };
+
     const styles = {
         container: {
             width: '100%', // Ensures full width
@@ -26,12 +40,12 @@ export default function HomeImage() {
         },
         specialFont: {
             fontFamily: 'Arizonia, cursive', 
-            fontSize: '5vw', // Responsive font size
+            fontSize: getFontSize(), // Responsive font size
             textShadow: '2px 2px 15px rgba(0, 0, 0, 0.7)',  
         },
         heading: {
             textShadow: '2px 2px 15px rgba(0, 0, 0, 0.7)', 
-            fontSize: '5vw', // Responsive font size
+            fontSize: getFontSize(), // Responsive font size
         },
     };
 
