@@ -91,6 +91,23 @@ export const QUERY_APPOINTMENTS = gql`
     }
 `;
 
+export const QUERY_SINGLE_APPOINTMENT = gql`
+    query getSingleAppointment($appointmentId: ID!) {
+        appointment(appointmentId: $appointmentId){
+            _id
+            duration
+            cleanup
+            price
+            date
+            time
+            service {
+                _id
+                name    
+            }
+        }
+    }
+`;
+
 export const GET_CONTACTS = gql`
   query GetContacts {
     getContacts {

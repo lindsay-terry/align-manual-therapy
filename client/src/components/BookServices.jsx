@@ -76,6 +76,7 @@ export default function BookServices() {
                 duration: option.duration,
                 cleanup: option.cleanup,
                 price: option.price,
+                appointmentId: null,
             };
             setSelectedValue(serviceData);
         }
@@ -86,6 +87,10 @@ export default function BookServices() {
             setShowCalendar(true);
         }
     };
+
+    const handleUpdateSuccess = () => {
+        console.log('Appointment rescheduled!');
+    }
 
     // Accordion/collapse of services
     const collapseItems = services.map((service) => ({
@@ -130,7 +135,7 @@ export default function BookServices() {
         </Form>
         ) : (
             // Pass user selection as props to calendar
-        <BookingCalendar selectedValue={selectedValue}/>
+        <BookingCalendar selectedValue={selectedValue} handleUpdateSuccess={handleUpdateSuccess}/>
         )}
         </div>
     )

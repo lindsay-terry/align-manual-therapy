@@ -53,6 +53,19 @@ const resolvers = {
                 throw new Error('Failed to fetch appointment data.');
             }
         },
+        // Query single appointment
+        appointment: async (parent, { appointmentId }) => {
+            try {
+                const appointment = await Appointment.findOne({ _id: appointmentId }).populate({ path: 'service' });
+                if (!appointment) {
+                    throw new Error('Appointment not found', error);
+                }
+
+                return appointment;
+            } catch (error) {
+                console.error('Error fetching appointment', error);
+            }
+        },
 
       getContacts: async () => {
             try {
@@ -150,6 +163,34 @@ const resolvers = {
                 return newAppointment;
             } catch (error) {
                 console.error('Error creating appointment', error);
+            }
+        },
+
+        updateAppointment: async(parent, { appointmentId, service, user, date, time, price, duration, cleanup }) => {
+            try {
+                const appointment = await Appointment.findById(appointmentId);
+                if (!appointment) {
+                    throw new Error('Appointment not found.');
+                }
+                const updateFields = {};
+                if (service) updateFields.service = service;
+                if (user) updateFields.user = user;
+                if (date) updateFields.date = date;
+                if (time) updateFields.time = time;
+                if (price) updateFields.price = price;
+                if (duration) updateFields.duration = duration;
+                if (cleanup) updateFields.cleanup = cleanup;
+
+                const updatedAppointment = await Appointment.findByIdAndUpdate(
+                    appointmentId,
+                    { $set: updateFields },
+                    { new: true }
+                );
+
+                return updatedAppointment;
+            } catch (error) {
+                console.error('Error updating appiontment', error);
+                throw new Error('Failed to update appointment.');
             }
         },
 

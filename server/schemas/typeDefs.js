@@ -75,6 +75,7 @@ const typeDefs =`
         services: [Service]
         me: User
         appointments: [Appointment]
+        appointment(appointmentId: ID!): Appointment
         getContacts: [Contact]
     }
     
@@ -89,6 +90,7 @@ const typeDefs =`
         createUser( firstName: String!, lastName: String!, email: String!, password: String!, phone: String!, birthdate: String!): Auth
         processPayment(sourceId: String!, amount: Int!): PaymentResult!
         createAppointment(service: ID!, user: ID!, date: String!, time: String!, duration: Int!, cleanup: Int!, price: Float!): Appointment
+        updateAppointment(appointmentId: ID!, service: ID, user: ID, date: String, time: String, price: Float, duration: Int, cleanup: Int): Appointment
         updateService(id: ID!, input: UpdateServiceInput!): Service
         submitContact(name: String!, email: String!, message: String!): String
         addNoteToUser(userId: ID!, note: String!): User
